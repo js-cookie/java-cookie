@@ -1,2 +1,2 @@
 # Java Cookie
-A complete Servlet API for handling cookies
+A simple Java Servlet API for handling cookies
