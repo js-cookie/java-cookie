@@ -24,8 +24,8 @@ public class CookiesReadTest extends BaseTest {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "v" )
 		});
-		Cookie actual = cookies.get( "c" );
+		String actual = cookies.get( "c" );
 		String expected = "v";
-		Assert.assertEquals( expected, actual.getValue() );
+		Assert.assertEquals( expected, actual );
 	}
 }

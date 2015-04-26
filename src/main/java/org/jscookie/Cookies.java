@@ -1,13 +1,30 @@
 package org.jscookie;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ResourceBundle;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class Cookies implements CookiesHandler {
+import org.eclipse.jdt.annotation.Nullable;
+
+public class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private Attributes defaults = new Attributes();
+	private CookiesDefinition.Attributes defaults = new Attributes();
+	private CookiesDefinition.Converter converter;
+
+	private static final String LSTRING_FILE = "javax.servlet.http.LocalStrings";
+	private static ResourceBundle lStrings = ResourceBundle.getBundle( LSTRING_FILE );
+
+	private Cookies( HttpServletRequest request, HttpServletResponse response, CookiesDefinition.Converter converter ) {
+		this( request, response );
+		this.converter = converter;
+	}
 
 	public Cookies( HttpServletRequest request, HttpServletResponse response ) {
 		this.request = request;
@@ -15,120 +32,211 @@ public class Cookies implements CookiesHandler {
 	}
 
 	@Override
-	public synchronized Cookie get( String name ) {
-		if ( name == null ) {
-			throw new NullPointerException( "name is null" );
+	public synchronized String get( String name ) {
+		if ( name == null || name.length() == 0 ) {
+			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
-		// TODO handle encoding
+
 		Cookie[] cookies = request.getCookies();
-		if ( cookies != null ) {
-			for ( Cookie cookie : cookies ) {
-				if ( name.equals( cookie.getName() ) ) {
-					return cookie;
+		if ( cookies == null ) {
+			return null;
+		}
+
+		for ( Cookie cookie : cookies ) {
+			String decodedValue = null;
+			String decodedName = null;
+
+			try {
+				decodedName = URLDecoder.decode( cookie.getName(), StandardCharsets.UTF_8.name() );
+			} catch ( UnsupportedEncodingException e ) {
+				e.printStackTrace();
+				continue;
+			}
+
+			if ( !name.equals( decodedName ) ) {
+				continue;
+			}
+
+			if ( converter != null ) {
+				try {
+					decodedValue = converter.convert( cookie.getValue(), decodedName );
+				} catch ( ConverterException e ) {
+					e.printStackTrace();
 				}
 			}
+
+			if ( decodedValue == null ) {
+				try {
+					decodedValue = URLDecoder.decode( cookie.getValue(), StandardCharsets.UTF_8.name() );
+				} catch ( UnsupportedEncodingException e ) {
+					e.printStackTrace();
+					continue;
+				}
+			}
+
+			if ( decodedValue == null ) {
+				continue;
+			}
+
+			return decodedValue;
 		}
+
 		return null;
 	}
 
 	@Override
-	public synchronized void set( String name, String value, Attributes attributes ) {
-		// TODO handle encoding
-		Cookie cookie = get( name );
-
-		if ( cookie == null ) {
-			// TODO check the behavior for "org.glassfish.web.rfc2109_cookie_names_enforced" is true
-			cookie = new Cookie( name, value );
+	public synchronized void set( String name, String value, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
+		if ( name == null || name.length() == 0 ) {
+			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
+		}
+		if ( value == null ) {
+			throw new IllegalArgumentException();
+		}
+		if ( attributes == null ) {
+			throw new IllegalArgumentException();
 		}
 
-		cookie.setValue( value );
+		String encodedName = URLEncoder.encode( name, StandardCharsets.UTF_8.name() );
+		String encodedValue = URLEncoder.encode( value, StandardCharsets.UTF_8.name() );
 
+		Cookie cookie = new Cookie( encodedName, encodedValue );
 		attributes = extend( defaults, attributes );
 
-		if ( attributes.expires != null ) {
-			cookie.setMaxAge( attributes.expires.toSecondsFromNow() );
+		Expiration expires = attributes.expires();
+		if ( expires != null ) {
+			cookie.setMaxAge( expires.toSecondsFromNow() );
 		}
 
-		if ( attributes.path != null ) {
-			cookie.setPath( attributes.path );
+		String path = attributes.path();
+		if ( path != null ) {
+			cookie.setPath( path );
 		}
 
-		if ( attributes.domain != null ) {
-			cookie.setDomain( attributes.domain );
+		String domain = attributes.domain();
+		if ( domain != null ) {
+			cookie.setDomain( domain );
 		}
 
-		if ( attributes.secure != null ) {
-			cookie.setSecure( attributes.secure );
+		Boolean secure = attributes.secure();
+		if ( secure != null ) {
+			cookie.setSecure( secure );
 		}
 
 		response.addCookie( cookie );
 	}
 
 	@Override
-	public synchronized void set( String name, String value ) {
+	public synchronized void set( String name, String value ) throws UnsupportedEncodingException {
+		if ( name == null || name.length() == 0 ) {
+			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
+		}
+		if ( value == null ) {
+			throw new IllegalArgumentException();
+		}
 		set( name, value, defaults );
 	}
 
 	@Override
-	public synchronized void remove( String name, Attributes attributes ) {
-		Cookie cookie = get( name );
-		if ( cookie == null ) {
-			return;
+	public synchronized void remove( String name, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
+		if ( name == null || name.length() == 0 ) {
+			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
+		if ( attributes == null ) {
+			throw new IllegalArgumentException();
+		}
+
 		set( name, "", extend( attributes, new Attributes()
 			.expires( Expiration.days( -1 ) ))
 		);
 	}
 
 	@Override
-	public synchronized void remove( String name ) {
+	public synchronized void remove( String name ) throws UnsupportedEncodingException {
+		if ( name == null || name.length() == 0 ) {
+			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
+		}
 		remove( name, new Attributes() );
 	}
 
 	@Override
-	public void setDefaults( Attributes defaults ) {
+	public void setDefaults( CookiesDefinition.Attributes defaults ) {
+		if ( defaults == null ) {
+			throw new IllegalArgumentException();
+		}
 		this.defaults = defaults;
 	}
 
-	private Attributes extend( Attributes a, Attributes b ) {
+	@Override
+	public Cookies withConverter( CookiesDefinition.Converter converter ) {
+		return new Cookies( request, response, converter );
+	}
+
+	private Attributes extend( CookiesDefinition.Attributes a, CookiesDefinition.Attributes b ) {
 		return new Attributes().merge( a ).merge( b );
 	}
 
-	public static class Attributes {
+	public static class Attributes extends CookiesDefinition.Attributes {
 		private Expiration expires;
 		private String path;
 		private String domain;
 		private Boolean secure;
-		public Attributes expires( Expiration expires ) {
+
+		@Override
+		@Nullable
+		Expiration expires() {
+			return expires;
+		}
+		public Attributes expires( @Nullable Expiration expires ) {
 			this.expires = expires;
 			return this;
 		}
-		public Attributes path( String path ) {
+
+		@Override
+		@Nullable
+		String path() {
+			return path;
+		}
+		public Attributes path( @Nullable String path ) {
 			this.path = path;
 			return this;
 		}
-		public Attributes domain( String domain ) {
+
+		@Override
+		@Nullable
+		String domain() {
+			return domain;
+		}
+		public Attributes domain( @Nullable String domain ) {
 			this.domain = domain;
 			return this;
 		}
-		public Attributes secure( boolean secure ) {
+
+		@Override
+		@Nullable
+		Boolean secure() {
+			return secure;
+		}
+		public Attributes secure( @Nullable Boolean secure ) {
 			this.secure = secure;
 			return this;
 		}
-		private Attributes merge( Attributes reference ) {
-			if ( reference.path != null ) {
-				path = reference.path;
+
+		private Attributes merge( CookiesDefinition.Attributes reference ) {
+			if ( reference.path() != null ) {
+				path = reference.path();
 			}
-			if ( reference.domain != null ) {
-				domain = reference.domain;
+			if ( reference.domain() != null ) {
+				domain = reference.domain();
 			}
-			if ( reference.secure != null ) {
-				secure = reference.secure;
+			if ( reference.secure() != null ) {
+				secure = reference.secure();
 			}
-			if ( reference.expires != null ) {
-				expires = reference.expires;
+			if ( reference.expires() != null ) {
+				expires = reference.expires();
 			}
 			return this;
 		}
 	}
+
+	public static abstract class Converter extends CookiesDefinition.Converter {};
 }
