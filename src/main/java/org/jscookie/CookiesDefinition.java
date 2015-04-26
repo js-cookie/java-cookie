@@ -1,6 +1,7 @@
 package org.jscookie;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 public interface CookiesDefinition {
 	/**
@@ -11,6 +12,13 @@ public interface CookiesDefinition {
 	 * @return <code>null</code> if the cookie doesn't exist
 	 */
 	String get( String name );
+
+	/**
+	 * Retrieves all cookies
+	 * 
+	 * @see #get(String)
+	 */
+	Map<String, String> get();
 
 	/**
 	 * Create or update an existing cookie extending the default attributes<br>

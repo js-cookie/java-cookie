@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.Cookie;
@@ -43,36 +45,13 @@ public class Cookies implements CookiesDefinition {
 		}
 
 		for ( Cookie cookie : cookies ) {
-			String decodedValue = null;
-			String decodedName = null;
-
-			try {
-				decodedName = URLDecoder.decode( cookie.getName(), StandardCharsets.UTF_8.name() );
-			} catch ( UnsupportedEncodingException e ) {
-				e.printStackTrace();
-				continue;
-			}
+			String decodedName = decodeName( cookie );
 
 			if ( !name.equals( decodedName ) ) {
 				continue;
 			}
 
-			if ( converter != null ) {
-				try {
-					decodedValue = converter.convert( cookie.getValue(), decodedName );
-				} catch ( ConverterException e ) {
-					e.printStackTrace();
-				}
-			}
-
-			if ( decodedValue == null ) {
-				try {
-					decodedValue = URLDecoder.decode( cookie.getValue(), StandardCharsets.UTF_8.name() );
-				} catch ( UnsupportedEncodingException e ) {
-					e.printStackTrace();
-					continue;
-				}
-			}
+			String decodedValue = decodeValue( cookie, decodedName );
 
 			if ( decodedValue == null ) {
 				continue;
@@ -82,6 +61,29 @@ public class Cookies implements CookiesDefinition {
 		}
 
 		return null;
+	}
+
+	@Override
+	public Map<String, String> get() {
+		Map<String, String> result = new HashMap<String, String>();
+
+		Cookie[] cookies = request.getCookies();
+		if ( cookies == null ) {
+			return null;
+		}
+
+		for ( Cookie cookie : cookies ) {
+			String decodedName = decodeName( cookie );
+			String decodedValue = decodeValue( cookie, decodedName );
+
+			if ( decodedValue == null ) {
+				continue;
+			}
+
+			result.put( decodedName, decodedValue );
+		}
+
+		return result;
 	}
 
 	@Override
@@ -175,6 +177,37 @@ public class Cookies implements CookiesDefinition {
 		return new Attributes().merge( a ).merge( b );
 	}
 
+	private String decodeName( Cookie cookie ) {
+		try {
+			return URLDecoder.decode( cookie.getName(), StandardCharsets.UTF_8.name() );
+		} catch ( UnsupportedEncodingException e ) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private @Nullable String decodeValue( Cookie cookie, String decodedName ) {
+		String decodedValue = null;
+
+		if ( converter != null ) {
+			try {
+				decodedValue = converter.convert( cookie.getValue(), decodedName );
+			} catch ( ConverterException e ) {
+				e.printStackTrace();
+			}
+		}
+
+		if ( decodedValue == null ) {
+			try {
+				decodedValue = URLDecoder.decode( cookie.getValue(), StandardCharsets.UTF_8.name() );
+			} catch ( UnsupportedEncodingException e ) {
+				e.printStackTrace();
+			}
+		}
+
+		return decodedValue;
+	}
+
 	public static class Attributes extends CookiesDefinition.Attributes {
 		private Expiration expires;
 		private String path;
@@ -238,5 +271,5 @@ public class Cookies implements CookiesDefinition {
 		}
 	}
 
-	public static abstract class Converter extends CookiesDefinition.Converter {};
+	public static abstract class Converter extends CookiesDefinition.Converter {}
 }
