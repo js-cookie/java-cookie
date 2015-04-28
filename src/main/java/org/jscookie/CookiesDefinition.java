@@ -14,6 +14,14 @@ public interface CookiesDefinition {
 	String get( String name );
 
 	/**
+	 * Retrieves a cookie and parse it using the given dataType instance
+	 * 
+	 * @throws ParseException
+	 *         If there's an error while parsing the cookie name using the given dataType
+	 */
+	<T> T get( String name, Class<T> dataType ) throws ParseException;
+
+	/**
 	 * Retrieves all cookies
 	 * 
 	 * @see #get(String)

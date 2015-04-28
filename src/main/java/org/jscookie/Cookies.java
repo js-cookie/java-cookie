@@ -64,6 +64,15 @@ public class Cookies implements CookiesDefinition {
 	}
 
 	@Override
+	public <T> T get( String name, Class<T> dataType ) throws ParseException {
+		String value = get( name );
+		if( Integer.class.equals( dataType ) ) {
+			return dataType.cast( Integer.parseInt( value ) );
+		}
+		throw new ParseException( "Unsupported data type: " + dataType.getName() );
+	}
+
+	@Override
 	public Map<String, String> get() {
 		Map<String, String> result = new HashMap<String, String>();
 
