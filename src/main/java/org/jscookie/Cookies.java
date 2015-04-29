@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-public class Cookies implements CookiesDefinition {
+public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private CookiesDefinition.Attributes defaults = new Attributes();
