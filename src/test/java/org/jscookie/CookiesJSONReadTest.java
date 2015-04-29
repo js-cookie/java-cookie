@@ -34,20 +34,20 @@ public class CookiesJSONReadTest extends BaseTest {
 		Assert.assertEquals( expected2, actual2 );
 	}
 
-//	@Test
-//	public read_boolean_type() {
-//		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-//			new Cookie( "c", "true" )
-//		});
-//
-//		String actual = cookies.get( "c" );
-//		String expected = "1";
-//		Assert.assertEquals( expected, actual );
-//
-//		boolean actual2 = cookies.get( "c", Boolean.class );
-//		boolean expected2 = true;
-//		Assert.assertEquals( expected2, actual2 );
-//	}
+	@Test
+	public void read_boolean_type() throws ParseException {
+		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
+			new Cookie( "c", "true" )
+		});
+
+		String actual = cookies.get( "c" );
+		String expected = "true";
+		Assert.assertEquals( expected, actual );
+
+		boolean actual2 = cookies.get( "c", Boolean.class );
+		boolean expected2 = true;
+		Assert.assertEquals( expected2, actual2 );
+	}
 //
 //	@Test
 //	public read_JSON_array() {
