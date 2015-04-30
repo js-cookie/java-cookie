@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @RunWith( MockitoJUnitRunner.class )
 public class CookiesJSONReadTest extends BaseTest {
 	private Cookies cookies;
@@ -48,9 +50,9 @@ public class CookiesJSONReadTest extends BaseTest {
 		boolean expected2 = true;
 		Assert.assertEquals( expected2, actual2 );
 	}
-//
+
 //	@Test
-//	public read_JSON_array() {
+//	public void read_JSON_array_string() {
 //		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 //			new Cookie( "c", "[\"v\"]" )
 //		});
@@ -64,21 +66,21 @@ public class CookiesJSONReadTest extends BaseTest {
 //		Assert.assertEquals( expected2, actual2 );
 //	}
 //
-//	@Test
-//	public read_custom_type() {
-//		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-//			new Cookie( "c", "{\"property\":\"v\"}" )
-//		});
-//
-//		String actual = cookies.get( "c" );
-//		String expected = "{\"property\":\"v\"}";
-//		Assert.assertEquals( expected, actual );
-//
-//		String actual2 = cookies.get( "c", CustomType.class ).getProperty();
-//		String expected2 = "v";
-//		Assert.assertEquals( expected2, actual2 );
-//	}
-//
+	@Test
+	public void read_custom_type() throws ParseException {
+		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
+			new Cookie( "c", "{\"property\":\"v\"}" )
+		});
+
+		String actual = cookies.get( "c" );
+		String expected = "{\"property\":\"v\"}";
+		Assert.assertEquals( expected, actual );
+
+		String actual2 = cookies.get( "c", CustomType.class ).getProperty();
+		String expected2 = "v";
+		Assert.assertEquals( expected2, actual2 );
+	}
+
 //	@Test
 //	public call_to_read_all_cookies_with_mixed_types() {
 //		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
@@ -94,7 +96,11 @@ public class CookiesJSONReadTest extends BaseTest {
 //		Assert.assertEquals( "v", actual.getString( "v" ) );
 //	}
 
-//	private class CustomType {
-//		private String property;
-//	}
+	private static class CustomType {
+		private String property;
+		@JsonProperty( "property" )
+		private String getProperty() {
+			return property;
+		}
+	}
 }

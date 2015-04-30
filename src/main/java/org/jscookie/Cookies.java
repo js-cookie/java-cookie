@@ -1,5 +1,6 @@
 package org.jscookie;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -14,11 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private CookiesDefinition.Attributes defaults = new Attributes();
 	private CookiesDefinition.Converter converter;
+	private ObjectMapper mapper = new ObjectMapper();
 
 	private static final String LSTRING_FILE = "javax.servlet.http.LocalStrings";
 	private static ResourceBundle lStrings = ResourceBundle.getBundle( LSTRING_FILE );
@@ -66,12 +70,11 @@ public final class Cookies implements CookiesDefinition {
 	@Override
 	public <T> T get( String name, Class<T> dataType ) throws ParseException {
 		String value = get( name );
-		if ( Integer.class.equals( dataType ) ) {
-			return dataType.cast( Integer.parseInt( value ) );
-		} else if ( Boolean.class.equals( dataType ) ) {
-			return dataType.cast( Boolean.parseBoolean( value ) );
+		try {
+			return mapper.readValue( value, dataType );
+		} catch ( IOException e ) {
+			throw new ParseException( e );
 		}
-		throw new ParseException( "Unsupported data type: " + dataType.getName() );
 	}
 
 	@Override
