@@ -3,6 +3,8 @@ package org.jscookie;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 public interface CookiesDefinition {
 	/**
 	 * Retrieves a cookie<br>
@@ -20,6 +22,19 @@ public interface CookiesDefinition {
 	 *         If there's an error while parsing the cookie name using the given dataType
 	 */
 	<T> T get( String name, Class<T> dataType ) throws ParseException;
+
+	/**
+	 * Retrieves a cookie and parse it using the given type reference. The type reference is used
+	 * to infer generic types from within a class and workaround Java Type Erasure.<br>
+	 * 
+	 * For more information check http://wiki.fasterxml.com/JacksonDataBinding#Full_Data_Binding
+	 * 
+	 * @throws ParseException
+	 *         If there's an error while parsing the cookie name using the given dataType
+	 * 
+	 * @see #get(String, Class)
+	 */
+	<T> T get( String name, TypeReference<T> typeRef ) throws ParseException;
 
 	/**
 	 * Retrieves all cookies

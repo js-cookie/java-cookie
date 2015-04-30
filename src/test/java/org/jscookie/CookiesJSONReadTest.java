@@ -1,5 +1,7 @@
 package org.jscookie;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 
 import org.jscookie.testutils.BaseTest;
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 @RunWith( MockitoJUnitRunner.class )
 public class CookiesJSONReadTest extends BaseTest {
@@ -51,21 +54,21 @@ public class CookiesJSONReadTest extends BaseTest {
 		Assert.assertEquals( expected2, actual2 );
 	}
 
-//	@Test
-//	public void read_JSON_array_string() {
-//		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-//			new Cookie( "c", "[\"v\"]" )
-//		});
-//
-//		String actual = cookies.get( "c" );
-//		String expected = "[\"v\"]";
-//		Assert.assertEquals( expected, actual );
-//
-//		String actual2 = cookies.get( "c", JSONArray.class ).getString( 0 );
-//		String expected2 = "v";
-//		Assert.assertEquals( expected2, actual2 );
-//	}
-//
+	@Test
+	public void read_JSON_array_string() throws ParseException {
+		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
+			new Cookie( "c", "[\"v\"]" )
+		});
+
+		String actual = cookies.get( "c" );
+		String expected = "[\"v\"]";
+		Assert.assertEquals( expected, actual );
+
+		String actual2 = cookies.get( "c", new TypeReference<List<String>>() {} ).get( 0 );
+		String expected2 = "v";
+		Assert.assertEquals( expected2, actual2 );
+	}
+
 	@Test
 	public void read_custom_type_with_string_prop() throws ParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {

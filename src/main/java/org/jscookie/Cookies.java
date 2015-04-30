@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class Cookies implements CookiesDefinition {
@@ -72,6 +73,16 @@ public final class Cookies implements CookiesDefinition {
 		String value = get( name );
 		try {
 			return mapper.readValue( value, dataType );
+		} catch ( IOException e ) {
+			throw new ParseException( e );
+		}
+	}
+
+	@Override
+	public <T> T get( String name, TypeReference<T> typeRef ) throws ParseException {
+		String value = get( name );
+		try {
+			return mapper.readValue( value, typeRef );
 		} catch ( IOException e ) {
 			throw new ParseException( e );
 		}
