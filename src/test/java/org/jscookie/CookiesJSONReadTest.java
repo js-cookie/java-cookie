@@ -114,21 +114,6 @@ public class CookiesJSONReadTest extends BaseTest {
 		Assert.assertEquals( expected2, actual2 );
 	}
 
-//	@Test
-//	public call_to_read_all_cookies_with_mixed_types() {
-//		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-//			new Cookie( "c", "{\"property\":\"bar\"}" ),
-//			new Cookie( "c2", "v" )
-//		});
-//
-//		JSONObject actual = cookies.get();
-//
-//		Assert.assertEquals( "{\"property\":\"bar\"}", actual.getString( "c" ) );
-//		Assert.assertEquals( "v", actual.get( "c2" ) );
-//		Assert.assertEquals( "bar", actual.get( "c", CustomType.class ).getProperty() );
-//		Assert.assertEquals( "v", actual.getString( "v" ) );
-//	}
-
 	private static class CustomTypeString {
 		private String property;
 		@JsonProperty( "property" )
