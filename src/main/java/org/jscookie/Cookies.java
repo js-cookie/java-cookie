@@ -153,6 +153,11 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
+	public void set( String name, int value, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
+		set( name, String.valueOf( value ), attributes );
+	}
+
+	@Override
 	public synchronized void set( String name, String value ) throws UnsupportedEncodingException {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
@@ -161,6 +166,11 @@ public final class Cookies implements CookiesDefinition {
 			throw new IllegalArgumentException();
 		}
 		set( name, value, defaults );
+	}
+
+	@Override
+	public void set( String name, int value ) throws UnsupportedEncodingException {
+		set( name, value, new Attributes() );
 	}
 
 	@Override

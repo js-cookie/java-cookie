@@ -55,7 +55,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_JSON_array_string() throws ParseException {
+	public void read_JSON_array_with_string() throws ParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "[\"v\"]" )
 		});
