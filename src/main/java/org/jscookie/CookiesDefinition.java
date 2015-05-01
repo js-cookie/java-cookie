@@ -79,6 +79,13 @@ interface CookiesDefinition {
 	<T> void set( String name, List<T> value, Attributes attributes ) throws CookieSerializationException;
 
 	/**
+	 * Create or update an existing cookie extending the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String, Attributes)
+	 */
+	void set( String name, CookieValue value, Attributes attributes ) throws CookieSerializationException;
+
+	/**
 	 * Create or update an existing cookie using the default attributes
 	 * 
 	 * @see #set(String, String, Attributes)
@@ -105,6 +112,13 @@ interface CookiesDefinition {
 	 * @see #set(String, String)
 	 */
 	<T> void set( String name, List<T> value ) throws CookieSerializationException;
+
+	/**
+	 * Create or update an existing cookie extending the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String)
+	 */
+	void set( String name, CookieValue value ) throws CookieSerializationException;
 
 	/**
 	 * Remove an existing cookie<br>

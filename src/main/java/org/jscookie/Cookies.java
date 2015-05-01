@@ -182,6 +182,15 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
+	public void set( String name, CookieValue value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+		try {
+			set( name, mapper.writeValueAsString( value ), attributes );
+		} catch ( UnsupportedEncodingException | JsonProcessingException e ) {
+			throw new CookieSerializationException( e );
+		}
+	}
+
+	@Override
 	public synchronized void set( String name, String value ) throws UnsupportedEncodingException {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
@@ -208,6 +217,11 @@ public final class Cookies implements CookiesDefinition {
 
 	@Override
 	public <T> void set( String name, List<T> value ) throws CookieSerializationException {
+		set( name, value, new Attributes() );
+	}
+
+	@Override
+	public void set( String name, CookieValue value ) throws CookieSerializationException {
 		set( name, value, new Attributes() );
 	}
 

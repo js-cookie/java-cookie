@@ -55,57 +55,66 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Assert.assertEquals( "%5B%22v%22%5D", actual.getValue() );
 	}
 
-//	@Test
-//	public void write_custom_type_with_string_prop() {
-//		cookies.set( "c", new CustomTypeString( "v" ) );
-//
-//		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-//		Mockito.verify( response ).addCookie( argument.capture() );
-//
-//		Cookie actual = argument.getValue();
-//		Assert.assertEquals( "v", actual.getValue() );
-//	}
-//
-//	@Test
-//	public void write_custom_type_with_boolean_prop() {
-//		cookies.set( "c", new CustomTypeBoolean( true ) );
-//
-//		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-//		Mockito.verify( response ).addCookie( argument.capture() );
-//
-//		Cookie actual = argument.getValue();
-//		Assert.assertEquals( "true", actual.getValue() );
-//	}
-//
-//	@Test
-//	public void write_custom_type_with_number_prop() {
-//		cookies.set( "c", new CustomTypeInteger( 1 ) );
-//
-//		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-//		Mockito.verify( response ).addCookie( argument.capture() );
-//
-//		Cookie actual = argument.getValue();
-//		Assert.assertEquals( "1", actual.getValue() );
-//	}
-//
-//	private class CustomTypeString {
-//		private String property;
-//		private CustomTypeString( String property ) {
-//			this.property = property;
-//		}
-//	}
-//
-//	private class CustomTypeBoolean {
-//		private Boolean property;
-//		private CustomTypeBoolean( Boolean property ) {
-//			this.property = property;
-//		}
-//	}
-//
-//	private class CustomTypeInteger {
-//		private Integer property;
-//		private CustomTypeInteger( Integer property ) {
-//			this.property = property;
-//		}
-//	}
+	@Test
+	public void write_custom_type_with_string_prop() throws CookieSerializationException {
+		cookies.set( "c", new CustomTypeString( "v" ) );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "%7B%22property%22%3A%22v%22%7D", actual.getValue() );
+	}
+
+	@Test
+	public void write_custom_type_with_boolean_prop() throws CookieSerializationException {
+		cookies.set( "c", new CustomTypeBoolean( true ) );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "%7B%22property%22%3Atrue%7D", actual.getValue() );
+	}
+
+	@Test
+	public void write_custom_type_with_number_prop() throws CookieSerializationException {
+		cookies.set( "c", new CustomTypeInteger( 1 ) );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "1", actual.getValue() );
+	}
+
+	class CustomTypeString implements CookieValue {
+		private String property;
+		private CustomTypeString( String property ) {
+			this.property = property;
+		}
+		public String getProperty() {
+			return property;
+		}
+	}
+
+	class CustomTypeBoolean implements CookieValue {
+		private Boolean property;
+		private CustomTypeBoolean( Boolean property ) {
+			this.property = property;
+		}
+		public Boolean getProperty() {
+			return property;
+		}
+	}
+
+	class CustomTypeInteger implements CookieValue {
+		private Integer property;
+		private CustomTypeInteger( Integer property ) {
+			this.property = property;
+		}
+		public Integer getProperty() {
+			return property;
+		}
+	}
 }
