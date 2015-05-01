@@ -1,6 +1,7 @@
 package org.jscookie;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,10 +19,10 @@ public interface CookiesDefinition {
 	/**
 	 * Retrieves a cookie and parse it using the given dataType instance
 	 * 
-	 * @throws ParseException
+	 * @throws CookieParseException
 	 *         If there's an error while parsing the cookie name using the given dataType
 	 */
-	<T> T get( String name, Class<T> dataType ) throws ParseException;
+	<T> T get( String name, Class<T> dataType ) throws CookieParseException;
 
 	/**
 	 * Retrieves a cookie and parse it using the given type reference. The type reference is used
@@ -29,12 +30,12 @@ public interface CookiesDefinition {
 	 * 
 	 * For more information check http://wiki.fasterxml.com/JacksonDataBinding#Full_Data_Binding
 	 * 
-	 * @throws ParseException
+	 * @throws CookieParseException
 	 *         If there's an error while parsing the cookie name using the given dataType
 	 * 
 	 * @see #get(String, Class)
 	 */
-	<T> T get( String name, TypeReference<T> typeRef ) throws ParseException;
+	<T> T get( String name, TypeReference<T> typeRef ) throws CookieParseException;
 
 	/**
 	 * Retrieves all cookies
@@ -61,14 +62,21 @@ public interface CookiesDefinition {
 	 * 
 	 * @see #set(String, String, Attributes)
 	 */
-	void set( String name, int value, Attributes attributes ) throws UnsupportedEncodingException;
+	void set( String name, int value, Attributes attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
 	 * 
 	 * @see #set(String, String, Attributes)
 	 */
-	void set( String name, boolean value, Attributes attributes ) throws UnsupportedEncodingException;
+	void set( String name, boolean value, Attributes attributes ) throws CookieSerializationException;
+
+	/**
+	 * Create or update an existing cookie extending the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String, Attributes)
+	 */
+	<T> void set( String name, List<T> value, Attributes attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie using the default attributes
@@ -82,14 +90,21 @@ public interface CookiesDefinition {
 	 * 
 	 * @see #set(String, String)
 	 */
-	void set( String name, int value ) throws UnsupportedEncodingException;
+	void set( String name, int value ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie using the default attributes and serializing the typed value
 	 * 
 	 * @see #set(String, String)
 	 */
-	void set( String name, boolean value ) throws UnsupportedEncodingException;
+	void set( String name, boolean value ) throws CookieSerializationException;
+
+	/**
+	 * Create or update an existing cookie using the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String)
+	 */
+	<T> void set( String name, List<T> value ) throws CookieSerializationException;
 
 	/**
 	 * Remove an existing cookie<br>

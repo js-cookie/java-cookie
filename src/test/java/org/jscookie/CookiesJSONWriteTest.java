@@ -1,6 +1,6 @@
 package org.jscookie;
 
-import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 import javax.servlet.http.Cookie;
 
@@ -23,7 +23,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void write_int_type() throws UnsupportedEncodingException {
+	public void write_int_type() throws CookieSerializationException {
 		cookies.set( "c", 1 );
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
@@ -34,7 +34,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void write_boolean_type() throws UnsupportedEncodingException {
+	public void write_boolean_type() throws CookieSerializationException {
 		cookies.set( "c", true );
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
@@ -44,17 +44,17 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Assert.assertEquals( "true", actual.getValue() );
 	}
 
-//	@Test
-//	public void write_JSON_array_with_string() {
-//		cookies.set( "c", Arrays.asList( "v" ) );
-//
-//		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-//		Mockito.verify( response ).addCookie( argument.capture() );
-//
-//		Cookie actual = argument.getValue();
-//		Assert.assertEquals( "v", actual.getValue() );
-//	}
-//
+	@Test
+	public void write_JSON_array_with_string() throws CookieSerializationException {
+		cookies.set( "c", Arrays.asList( "v" ) );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "%5B%22v%22%5D", actual.getValue() );
+	}
+
 //	@Test
 //	public void write_custom_type_with_string_prop() {
 //		cookies.set( "c", new CustomTypeString( "v" ) );

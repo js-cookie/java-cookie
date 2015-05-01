@@ -6,6 +6,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -69,22 +71,22 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public <T> T get( String name, Class<T> dataType ) throws ParseException {
+	public <T> T get( String name, Class<T> dataType ) throws CookieParseException {
 		String value = get( name );
 		try {
 			return mapper.readValue( value, dataType );
 		} catch ( IOException e ) {
-			throw new ParseException( e );
+			throw new CookieParseException( e );
 		}
 	}
 
 	@Override
-	public <T> T get( String name, TypeReference<T> typeRef ) throws ParseException {
+	public <T> T get( String name, TypeReference<T> typeRef ) throws CookieParseException {
 		String value = get( name );
 		try {
 			return mapper.readValue( value, typeRef );
 		} catch ( IOException e ) {
-			throw new ParseException( e );
+			throw new CookieParseException( e );
 		}
 	}
 
@@ -153,13 +155,30 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void set( String name, int value, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
-		set( name, String.valueOf( value ), attributes );
+	public void set( String name, int value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+		try {
+			set( name, String.valueOf( value ), attributes );
+		} catch ( UnsupportedEncodingException e ) {
+			throw new CookieSerializationException( e );
+		}
 	}
 
 	@Override
-	public void set( String name, boolean value, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
-		set( name, String.valueOf( value ), attributes );
+	public void set( String name, boolean value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+		try {
+			set( name, String.valueOf( value ), attributes );
+		} catch ( UnsupportedEncodingException e ) {
+			throw new CookieSerializationException( e );
+		}
+	}
+
+	@Override
+	public <T> void set( String name, List<T> value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+		try {
+			set( name, mapper.writeValueAsString( value ), attributes );
+		} catch ( UnsupportedEncodingException | JsonProcessingException e ) {
+			throw new CookieSerializationException( e );
+		}
 	}
 
 	@Override
@@ -174,13 +193,22 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void set( String name, int value ) throws UnsupportedEncodingException {
+	public void set( String name, int value ) throws CookieSerializationException {
 		set( name, value, new Attributes() );
 	}
 
 	@Override
-	public void set( String name, boolean value ) throws UnsupportedEncodingException {
-		set( name, String.valueOf( value ) );
+	public void set( String name, boolean value ) throws CookieSerializationException {
+		try {
+			set( name, String.valueOf( value ) );
+		} catch ( UnsupportedEncodingException e ) {
+			throw new CookieSerializationException( e );
+		}
+	}
+
+	@Override
+	public <T> void set( String name, List<T> value ) throws CookieSerializationException {
+		set( name, value, new Attributes() );
 	}
 
 	@Override

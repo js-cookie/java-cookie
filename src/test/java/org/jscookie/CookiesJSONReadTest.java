@@ -25,7 +25,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_int_type() throws ParseException {
+	public void read_int_type() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "1" )
 		});
@@ -40,7 +40,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_boolean_type() throws ParseException {
+	public void read_boolean_type() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "true" )
 		});
@@ -55,7 +55,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_JSON_array_with_string() throws ParseException {
+	public void read_JSON_array_with_string() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "[\"v\"]" )
 		});
@@ -70,7 +70,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_custom_type_with_string_prop() throws ParseException {
+	public void read_custom_type_with_string_prop() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "{\"property\":\"v\"}" )
 		});
@@ -85,7 +85,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_custom_type_with_boolean_prop() throws ParseException {
+	public void read_custom_type_with_boolean_prop() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "{\"property\":true}" )
 		});
@@ -100,7 +100,7 @@ public class CookiesJSONReadTest extends BaseTest {
 	}
 
 	@Test
-	public void read_custom_type_with_number_prop() throws ParseException {
+	public void read_custom_type_with_number_prop() throws CookieParseException {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 			new Cookie( "c", "{\"property\":1}" )
 		});
