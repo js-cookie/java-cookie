@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
-public interface CookiesDefinition {
+interface CookiesDefinition {
 	/**
 	 * Retrieves a cookie<br>
 	 * By default, assumes the characters not allowed in each cookie name are encoded with each
