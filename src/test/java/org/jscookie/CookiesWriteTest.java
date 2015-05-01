@@ -40,7 +40,7 @@ public class CookiesWriteTest extends BaseTest {
 
 	@Test
 	public void simple_write_with_default_attributes() throws UnsupportedEncodingException {
-		cookies.setDefaults(new Cookies.Attributes()
+		cookies.setDefaults(Cookies.Attributes.empty()
 			.path( "/" )
 			.domain( "site.com" )
 			.secure( true )
@@ -62,7 +62,7 @@ public class CookiesWriteTest extends BaseTest {
 
 	@Test
 	public void simple_write_with_attributes() throws UnsupportedEncodingException {
-		cookies.set( "c", "v", new Cookies.Attributes()
+		cookies.set( "c", "v", Cookies.Attributes.empty()
 			.path( "/" )
 			.domain( "example.com" )
 			.secure( true )
@@ -83,11 +83,11 @@ public class CookiesWriteTest extends BaseTest {
 
 	@Test
 	public void simple_write_overriding_default_attributes() throws UnsupportedEncodingException {
-		cookies.setDefaults(new Cookies.Attributes()
+		cookies.setDefaults(Cookies.Attributes.empty()
 			.path( "/path/" )
 			.secure( true )
 		);
-		cookies.set( "c", "v", new Cookies.Attributes()
+		cookies.set( "c", "v", Cookies.Attributes.empty()
 			.path( "/" )
 		);
 

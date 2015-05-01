@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private CookiesDefinition.Attributes defaults = new Attributes();
+	private CookiesDefinition.Attributes defaults = Attributes.empty();
 	private CookiesDefinition.Converter converter;
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -203,7 +203,7 @@ public final class Cookies implements CookiesDefinition {
 
 	@Override
 	public void set( String name, int value ) throws CookieSerializationException {
-		set( name, value, new Attributes() );
+		set( name, value, Attributes.empty() );
 	}
 
 	@Override
@@ -217,12 +217,12 @@ public final class Cookies implements CookiesDefinition {
 
 	@Override
 	public <T> void set( String name, List<T> value ) throws CookieSerializationException {
-		set( name, value, new Attributes() );
+		set( name, value, Attributes.empty() );
 	}
 
 	@Override
 	public void set( String name, CookieValue value ) throws CookieSerializationException {
-		set( name, value, new Attributes() );
+		set( name, value, Attributes.empty() );
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public final class Cookies implements CookiesDefinition {
 			throw new IllegalArgumentException();
 		}
 
-		set( name, "", extend( attributes, new Attributes()
+		set( name, "", extend( attributes, Attributes.empty()
 			.expires( Expiration.days( -1 ) ))
 		);
 	}
@@ -244,7 +244,7 @@ public final class Cookies implements CookiesDefinition {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
-		remove( name, new Attributes() );
+		remove( name, Attributes.empty() );
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private Attributes extend( CookiesDefinition.Attributes a, CookiesDefinition.Attributes b ) {
-		return new Attributes().merge( a ).merge( b );
+		return Attributes.empty().merge( a ).merge( b );
 	}
 
 	private String decodeName( Cookie cookie ) {
@@ -300,6 +300,12 @@ public final class Cookies implements CookiesDefinition {
 		private String path;
 		private String domain;
 		private Boolean secure;
+
+		private Attributes() {}
+
+		public static Attributes empty() {
+			return new Attributes();
+		}
 
 		@Override
 		@Nullable
