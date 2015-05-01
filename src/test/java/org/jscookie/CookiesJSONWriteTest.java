@@ -85,7 +85,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Mockito.verify( response ).addCookie( argument.capture() );
 
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "1", actual.getValue() );
+		Assert.assertEquals( "%7B%22property%22%3A1%7D", actual.getValue() );
 	}
 
 	class CustomTypeString implements CookieValue {
