@@ -33,17 +33,17 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Assert.assertEquals( "1", actual.getValue() );
 	}
 
-//	@Test
-//	public void write_boolean_type() {
-//		cookies.set( "c", true );
-//
-//		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-//		Mockito.verify( response ).addCookie( argument.capture() );
-//
-//		Cookie actual = argument.getValue();
-//		Assert.assertEquals( "true", actual.getValue() );
-//	}
-//
+	@Test
+	public void write_boolean_type() throws UnsupportedEncodingException {
+		cookies.set( "c", true );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "true", actual.getValue() );
+	}
+
 //	@Test
 //	public void write_JSON_array_with_string() {
 //		cookies.set( "c", Arrays.asList( "v" ) );

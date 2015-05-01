@@ -64,6 +64,13 @@ public interface CookiesDefinition {
 	void set( String name, int value, Attributes attributes ) throws UnsupportedEncodingException;
 
 	/**
+	 * Create or update an existing cookie extending the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String, Attributes)
+	 */
+	void set( String name, boolean value, Attributes attributes ) throws UnsupportedEncodingException;
+
+	/**
 	 * Create or update an existing cookie using the default attributes
 	 * 
 	 * @see #set(String, String, Attributes)
@@ -73,9 +80,16 @@ public interface CookiesDefinition {
 	/**
 	 * Create or update an existing cookie using the default attributes and serializing the typed value
 	 * 
-	 * @see #set(String, int)
+	 * @see #set(String, String)
 	 */
 	void set( String name, int value ) throws UnsupportedEncodingException;
+
+	/**
+	 * Create or update an existing cookie using the default attributes and serializing the typed value
+	 * 
+	 * @see #set(String, String)
+	 */
+	void set( String name, boolean value ) throws UnsupportedEncodingException;
 
 	/**
 	 * Remove an existing cookie<br>
