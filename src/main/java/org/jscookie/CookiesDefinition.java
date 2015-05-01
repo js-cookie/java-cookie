@@ -57,18 +57,22 @@ public interface CookiesDefinition {
 	void set( String name, String value, Attributes attributes ) throws UnsupportedEncodingException;
 
 	/**
+	 * Create or update an existing cookie extending the default attributes and serializing the typed value
+	 * 
 	 * @see #set(String, String, Attributes)
 	 */
 	void set( String name, int value, Attributes attributes ) throws UnsupportedEncodingException;
 
 	/**
-	 * Create or update an existing cookie using the default attributes<br>
+	 * Create or update an existing cookie using the default attributes
 	 * 
 	 * @see #set(String, String, Attributes)
 	 */
 	void set( String name, String value ) throws UnsupportedEncodingException;
 
 	/**
+	 * Create or update an existing cookie using the default attributes and serializing the typed value
+	 * 
 	 * @see #set(String, int)
 	 */
 	void set( String name, int value ) throws UnsupportedEncodingException;
