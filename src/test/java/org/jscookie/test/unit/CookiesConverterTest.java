@@ -1,11 +1,13 @@
-package org.jscookie;
+package org.jscookie.test.unit;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.servlet.http.Cookie;
 
-import org.jscookie.testutils.BaseTest;
+import org.jscookie.ConverterException;
+import org.jscookie.Cookies;
+import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

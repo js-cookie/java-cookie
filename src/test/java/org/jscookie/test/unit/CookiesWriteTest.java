@@ -1,10 +1,12 @@
-package org.jscookie;
+package org.jscookie.test.unit;
 
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.Cookie;
 
-import org.jscookie.testutils.BaseTest;
+import org.jscookie.Cookies;
+import org.jscookie.Expiration;
+import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

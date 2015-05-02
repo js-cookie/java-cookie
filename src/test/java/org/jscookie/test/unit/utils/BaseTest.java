@@ -1,4 +1,4 @@
-package org.jscookie.testutils;
+package org.jscookie.test.unit.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

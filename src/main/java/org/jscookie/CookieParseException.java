@@ -1,6 +1,6 @@
 package org.jscookie;
 
-class CookieParseException extends Exception  {
+public class CookieParseException extends Exception  {
 	private static final long serialVersionUID = 1;
 	CookieParseException( Throwable cause ) {
 		super( cause );
