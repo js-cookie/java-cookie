@@ -1,0 +1,7 @@
+{
+  "name": "java-cookie",
+  "version": "1.0.0",
+  "devDependencies": {
+    "bower": "1.4.1"
+  }
+}
