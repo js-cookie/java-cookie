@@ -1,4 +1,7 @@
 {
   "name": "java-cookie",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "devDependencies": {
+    "js-cookie": "integration-api"
+  }
 }
