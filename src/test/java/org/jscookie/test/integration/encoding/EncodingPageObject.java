@@ -12,7 +12,9 @@ public class EncodingPageObject {
 		this.driver = driver;
 	}
 	EncodingPageObject navigateTo( URL baseURL ) {
-		driver.navigate().to( baseURL + "encoding" );
+		String query = "integration_baseurl=" + baseURL;
+		String url = baseURL + "test/encoding.html";
+		driver.navigate().to( url + "?" + query );
 		return this;
 	}
 	QUnitPageObject qunit() {

@@ -2,6 +2,7 @@ package org.jscookie.test.integration.qunit;
 
 import java.io.IOException;
 
+import org.jscookie.test.integration.test.utils.Debug;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,13 +12,13 @@ import com.google.common.base.Function;
 
 public class QUnitPageObject {
 	private WebDriver driver;
-	private static int COMPLETION_TIMEOUT = 60;
+	private static int TIMEOUT_IN_SECONDS = 1800;
 	private ObjectMapper mapper = new ObjectMapper();
 	public QUnitPageObject( WebDriver driver ) {
 		this.driver = driver;
 	}
-	public QUnitResults waitForTests() {
-		return new WebDriverWait( driver, COMPLETION_TIMEOUT )
+	public QUnitResults waitForTests( final Debug debug ) {
+		return new WebDriverWait( driver, TIMEOUT_IN_SECONDS )
 		.until(new Function<WebDriver, QUnitResults>() {
 			@Override
 			public QUnitResults apply( WebDriver input ) {
@@ -28,12 +29,16 @@ public class QUnitPageObject {
 						"return window.global_test_results && JSON.stringify(window.global_test_results)"
 					);
 					System.out.println( "Waiting for 'window.global_test_results': " + result );
-					if ( result != null ) {
-						try {
-							return mapper.readValue( result, QUnitResults.class );
-						} catch ( IOException cause ) {
-							throw new GlobalTestResultException( result, cause );
-						}
+					if ( result == null ) {
+						return null;
+					}
+					if ( debug.is( true ) ) {
+						return null;
+					}
+					try {
+						return mapper.readValue( result, QUnitResults.class );
+					} catch ( IOException cause ) {
+						throw new GlobalTestResultException( result, cause );
 					}
 				}
 				return null;

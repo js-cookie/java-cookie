@@ -15,6 +15,7 @@ import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jscookie.test.integration.qunit.QUnitPageObject;
 import org.jscookie.test.integration.qunit.QUnitResults;
+import org.jscookie.test.integration.test.utils.Debug;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 @RunWith( Arquillian.class )
 public class CookiesEncodingIT {
-	private static boolean DEBUG_JS = false;
+	private static Debug debug = Debug.FALSE;
 
 	@Deployment
 	public static Archive<?> createDeployment() {
@@ -35,7 +36,7 @@ public class CookiesEncodingIT {
 
 		GenericArchive qunitFiles = ShrinkWrap.create( GenericArchive.class )
 			.as( ExplodedImporter.class )
-			.importDirectory( "src/main/webapp" )
+			.importDirectory( "bower_components/js-cookie/" )
 			.as( GenericArchive.class );
 
 		WebArchive war = ShrinkWrap.create( WebArchive.class )
@@ -58,7 +59,7 @@ public class CookiesEncodingIT {
 		EncodingPageObject encoding = PageFactory.initElements( driver, EncodingPageObject.class );
 		encoding.navigateTo( baseURL );
 		QUnitPageObject qunit = encoding.qunit();
-		QUnitResults results = qunit.waitForTests();
+		QUnitResults results = qunit.waitForTests( debug );
 
 		int expectedPasses = results.getTotal();
 		int actualPasses = results.getPassed();
@@ -68,7 +69,7 @@ public class CookiesEncodingIT {
 	}
 
 	private WebDriver createDriver() {
-		if ( DEBUG_JS ) {
+		if ( debug.is( true ) ) {
 			return new FirefoxDriver();
 		}
 
@@ -79,7 +80,7 @@ public class CookiesEncodingIT {
 	}
 
 	private void dispose( WebDriver driver ) {
-		if ( !DEBUG_JS ) {
+		if ( debug.is( false ) ) {
 			driver.quit();
 		}
 	}
