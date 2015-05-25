@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private CookiesDefinition.Attributes defaults = Attributes.empty();
+	private CookiesDefinition.Attributes defaults = Attributes.empty().path( "/" );
 	private CookiesDefinition.Converter converter;
 	private ObjectMapper mapper = new ObjectMapper();
 

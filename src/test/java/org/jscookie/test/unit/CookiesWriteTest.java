@@ -34,7 +34,7 @@ public class CookiesWriteTest extends BaseTest {
 		Cookie actual = argument.getValue();
 		Assert.assertEquals( "c", actual.getName() );
 		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( null, actual.getPath() );
+		Assert.assertEquals( "/", actual.getPath() );
 		Assert.assertEquals( null, actual.getDomain() );
 		Assert.assertEquals( false, actual.getSecure() );
 		Assert.assertEquals( -1, actual.getMaxAge() );
