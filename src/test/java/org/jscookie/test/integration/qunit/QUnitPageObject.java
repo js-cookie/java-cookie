@@ -28,11 +28,11 @@ public class QUnitPageObject {
 					String result = ( String )js.executeScript(
 						"return window.global_test_results && JSON.stringify(window.global_test_results)"
 					);
-					System.out.println( "Waiting for 'window.global_test_results': " + result );
-					if ( result == null ) {
+					if ( debug.is( true ) ) {
 						return null;
 					}
-					if ( debug.is( true ) ) {
+					System.out.println( "Waiting for 'window.global_test_results': " + result );
+					if ( result == null ) {
 						return null;
 					}
 					try {
