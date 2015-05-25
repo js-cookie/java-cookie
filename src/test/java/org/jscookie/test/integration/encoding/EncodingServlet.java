@@ -26,6 +26,10 @@ public class EncodingServlet extends HttpServlet {
 		Cookies cookies = new Cookies( request, response );
 		String value = cookies.get( name );
 
+		if ( value == null ) {
+			throw new NullPointerException( "Cookie not found with name: " + name );
+		}
+
 		System.out.println( "Value: " + value );
 		System.out.println( "--------------------" );
 
