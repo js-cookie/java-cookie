@@ -23,13 +23,34 @@ public class CookiesEncodingTest extends BaseTest {
 
 	@Test
 	public void character_not_allowed_in_name_and_value() {
-		cookies.set( ";", ";" );
+		cookies.set( ";,\\\" ", ";,\\\" " );
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
 		Mockito.verify( response ).addCookie( argument.capture() );
 		
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%3B", actual.getName() );
-		Assert.assertEquals( "%3B", actual.getValue() );
+		Assert.assertEquals( "%3B%2C%5C%22%20", actual.getName() );
+		Assert.assertEquals( "%3B%2C%5C%22%20", actual.getValue() );
+	}
+
+	@Test
+	public void characters_allowed_in_name_and_value() {
+		cookies.set(
+			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
+			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~"
+		);
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+		
+		Cookie actual = argument.getValue();
+		Assert.assertEquals(
+			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
+			actual.getValue()
+		);
+		Assert.assertEquals(
+			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
+			actual.getName()
+		);
 	}
 }

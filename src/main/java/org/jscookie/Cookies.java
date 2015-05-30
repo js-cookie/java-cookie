@@ -243,6 +243,29 @@ public final class Cookies implements CookiesDefinition {
 		String encoded = plain;
 		for ( int i = 0; i < plain.length(); i++ ) {
 			Character character = plain.charAt( i );
+
+			boolean isDigit = Character.isDigit( character );
+			if ( isDigit ) {
+				continue;
+			}
+
+			boolean isAsciiUppercaseLetter = character >= 'A' && character <= 'Z';
+			if ( isAsciiUppercaseLetter ) {
+				continue;
+			}
+
+			boolean isAsciiLowercaseLetter = character >= 'a' && character <= 'z';
+			if ( isAsciiLowercaseLetter ) {
+				continue;
+			}
+
+			boolean isAllowed = character == '!' || character == '#' || character == '$' ||
+					character == '&' || character == '\'' || character == '*' || character == '+' ||
+					character == '-' || character == '.' || character == '^' || character == '_' ||
+					character == '`' || character == '|' || character == '~';
+			if ( isAllowed ) {
+				continue;
+			}
 			String hex = "%" + Integer.toHexString( character ).toUpperCase();
 			encoded = encoded.replace( character.toString(), hex );
 		}
