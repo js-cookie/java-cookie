@@ -1,6 +1,5 @@
 package org.jscookie;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -49,13 +48,9 @@ interface CookiesDefinition {
 	 * By default, the characters not allowed in the cookie name or value are encoded with each
 	 * one's UTF-8 Hex equivalent using percent-encoding.
 	 * 
-	 * @throws UnsupportedEncodingException 
-	 *         If the current encoding being used to encode/decode the cookie name or value is not
-	 *         supported
-	 * 
 	 * @see #get(String)
 	 */
-	void set( String name, String value, Attributes attributes ) throws UnsupportedEncodingException;
+	void set( String name, String value, Attributes attributes );
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
@@ -90,7 +85,7 @@ interface CookiesDefinition {
 	 * 
 	 * @see #set(String, String, Attributes)
 	 */
-	void set( String name, String value ) throws UnsupportedEncodingException;
+	void set( String name, String value );
 
 	/**
 	 * Create or update an existing cookie using the default attributes and serializing the typed value
@@ -129,19 +124,16 @@ interface CookiesDefinition {
 	 *        You must pass the exact same path, domain and secure attributes that were used to set
 	 *        the cookie, unless you're relying on the default attributes
 	 * 
-	 * @throws UnsupportedEncodingException
-	 *         If the current encoding being used to decode the cookie name is not supported
-	 * 
 	 * @see #get(String)
 	 */
-	void remove( String name, Attributes attributes ) throws UnsupportedEncodingException;
+	void remove( String name, Attributes attributes );
 
 	/**
 	 * Remove an existing cookie using the default attributes
 	 * 
 	 * @see #remove(String, Attributes) 
 	 */
-	void remove( String name ) throws UnsupportedEncodingException;
+	void remove( String name );
 
 	/**
 	 * Change the default attributes of this instance

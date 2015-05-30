@@ -1,7 +1,5 @@
 package org.jscookie.test.unit;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.Cookie;
 
 import org.jscookie.Cookies;
@@ -25,7 +23,7 @@ public class CookiesWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void simple_write() throws UnsupportedEncodingException {
+	public void simple_write() {
 		cookies.set( "c", "v" );
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
@@ -41,7 +39,7 @@ public class CookiesWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void simple_write_with_default_attributes() throws UnsupportedEncodingException {
+	public void simple_write_with_default_attributes() {
 		cookies.setDefaults(Cookies.Attributes.empty()
 			.path( "/" )
 			.domain( "site.com" )
@@ -63,7 +61,7 @@ public class CookiesWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void simple_write_with_attributes() throws UnsupportedEncodingException {
+	public void simple_write_with_attributes() {
 		cookies.set( "c", "v", Cookies.Attributes.empty()
 			.path( "/" )
 			.domain( "example.com" )
@@ -84,7 +82,7 @@ public class CookiesWriteTest extends BaseTest {
 	}
 
 	@Test
-	public void simple_write_overriding_default_attributes() throws UnsupportedEncodingException {
+	public void simple_write_overriding_default_attributes() {
 		cookies.setDefaults(Cookies.Attributes.empty()
 			.path( "/path/" )
 			.secure( true )

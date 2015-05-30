@@ -1,14 +1,12 @@
 package org.jscookie;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -52,19 +50,13 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		for ( Cookie cookie : cookies ) {
-			String decodedName = decodeName( cookie );
+			String decodedName = decode( cookie.getName() );
 
 			if ( !name.equals( decodedName ) ) {
 				continue;
 			}
-
-			String decodedValue = decodeValue( cookie, decodedName );
-
-			if ( decodedValue == null ) {
-				continue;
-			}
-
-			return decodedValue;
+			
+			return decodeValue( cookie, decodedName );
 		}
 
 		return null;
@@ -100,13 +92,8 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		for ( Cookie cookie : cookies ) {
-			String decodedName = decodeName( cookie );
+			String decodedName = decode( cookie.getName() );
 			String decodedValue = decodeValue( cookie, decodedName );
-
-			if ( decodedValue == null ) {
-				continue;
-			}
-
 			result.put( decodedName, decodedValue );
 		}
 
@@ -114,7 +101,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public synchronized void set( String name, String value, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
+	public synchronized void set( String name, String value, CookiesDefinition.Attributes attributes ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -125,8 +112,8 @@ public final class Cookies implements CookiesDefinition {
 			throw new IllegalArgumentException();
 		}
 
-		String encodedName = URLEncoder.encode( name, StandardCharsets.UTF_8.name() );
-		String encodedValue = URLEncoder.encode( value, StandardCharsets.UTF_8.name() );
+		String encodedName = encode( name );
+		String encodedValue = encode( value );
 
 		Cookie cookie = new Cookie( encodedName, encodedValue );
 		attributes = extend( defaults, attributes );
@@ -156,27 +143,19 @@ public final class Cookies implements CookiesDefinition {
 
 	@Override
 	public void set( String name, int value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
-		try {
-			set( name, String.valueOf( value ), attributes );
-		} catch ( UnsupportedEncodingException e ) {
-			throw new CookieSerializationException( e );
-		}
+		set( name, String.valueOf( value ), attributes );
 	}
 
 	@Override
 	public void set( String name, boolean value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
-		try {
-			set( name, String.valueOf( value ), attributes );
-		} catch ( UnsupportedEncodingException e ) {
-			throw new CookieSerializationException( e );
-		}
+		set( name, String.valueOf( value ), attributes );
 	}
 
 	@Override
 	public <T> void set( String name, List<T> value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
 		try {
 			set( name, mapper.writeValueAsString( value ), attributes );
-		} catch ( UnsupportedEncodingException | JsonProcessingException e ) {
+		} catch ( JsonProcessingException e ) {
 			throw new CookieSerializationException( e );
 		}
 	}
@@ -185,13 +164,13 @@ public final class Cookies implements CookiesDefinition {
 	public void set( String name, CookieValue value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
 		try {
 			set( name, mapper.writeValueAsString( value ), attributes );
-		} catch ( UnsupportedEncodingException | JsonProcessingException e ) {
+		} catch ( JsonProcessingException e ) {
 			throw new CookieSerializationException( e );
 		}
 	}
 
 	@Override
-	public void set( String name, String value ) throws UnsupportedEncodingException {
+	public void set( String name, String value ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -207,12 +186,8 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void set( String name, boolean value ) throws CookieSerializationException {
-		try {
-			set( name, String.valueOf( value ) );
-		} catch ( UnsupportedEncodingException e ) {
-			throw new CookieSerializationException( e );
-		}
+	public void set( String name, boolean value ) {
+		set( name, String.valueOf( value ) );
 	}
 
 	@Override
@@ -226,7 +201,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void remove( String name, CookiesDefinition.Attributes attributes ) throws UnsupportedEncodingException {
+	public void remove( String name, CookiesDefinition.Attributes attributes ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -240,7 +215,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void remove( String name ) throws UnsupportedEncodingException {
+	public void remove( String name ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -264,16 +239,32 @@ public final class Cookies implements CookiesDefinition {
 		return Attributes.empty().merge( a ).merge( b );
 	}
 
-	private String decodeName( Cookie cookie ) {
-		try {
-			return URLDecoder.decode( cookie.getName(), StandardCharsets.UTF_8.name() );
-		} catch ( UnsupportedEncodingException e ) {
-			e.printStackTrace();
+	private String encode( String plain ) {
+		String encoded = plain;
+		for ( int i = 0; i < plain.length(); i++ ) {
+			Character character = plain.charAt( i );
+			String hex = "%" + Integer.toHexString( character ).toUpperCase();
+			encoded = encoded.replace( character.toString(), hex );
 		}
-		return null;
+		return encoded;
 	}
 
-	private @Nullable String decodeValue( Cookie cookie, String decodedName ) {
+	private String decode( String encoded ) {
+		Pattern pattern = Pattern.compile( "(%[0-9A-Z]{2})+" );
+		Matcher matcher = pattern.matcher( encoded );
+		if ( !matcher.matches() ) {
+			return encoded;
+		}
+		for ( int groupIndex = 0; groupIndex < matcher.groupCount(); groupIndex++ ) {
+			String character = matcher.group( groupIndex );
+			String hexChar = character.substring( 1, character.length() );
+			Character decoded = ( char )Integer.parseInt( hexChar, 16 );
+			encoded = encoded.replace( character, decoded.toString() );
+		}
+		return encoded;
+	}
+
+	private String decodeValue( Cookie cookie, String decodedName ) {
 		String decodedValue = null;
 
 		if ( converter != null ) {
@@ -285,11 +276,7 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		if ( decodedValue == null ) {
-			try {
-				decodedValue = URLDecoder.decode( cookie.getValue(), StandardCharsets.UTF_8.name() );
-			} catch ( UnsupportedEncodingException e ) {
-				e.printStackTrace();
-			}
+			decodedValue = decode( cookie.getValue() );
 		}
 
 		return decodedValue;
