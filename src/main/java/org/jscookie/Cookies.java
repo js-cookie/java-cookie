@@ -259,13 +259,16 @@ public final class Cookies implements CookiesDefinition {
 				continue;
 			}
 
-			boolean isAllowed = character == '!' || character == '#' || character == '$' ||
-					character == '&' || character == '\'' || character == '*' || character == '+' ||
-					character == '-' || character == '.' || character == '^' || character == '_' ||
-					character == '`' || character == '|' || character == '~';
+			boolean isAllowed =
+					character == '!' || character == '#'  || character == '$' ||
+					character == '&' || character == '\'' || character == '*' ||
+					character == '+' || character == '-'  || character == '.' ||
+					character == '^' || character == '_'  || character == '`' ||
+					character == '|' || character == '~';
 			if ( isAllowed ) {
 				continue;
 			}
+
 			String hex = "%" + Integer.toHexString( character ).toUpperCase();
 			encoded = encoded.replace( character.toString(), hex );
 		}
