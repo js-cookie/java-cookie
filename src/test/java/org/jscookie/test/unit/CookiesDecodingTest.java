@@ -1,7 +1,5 @@
 package org.jscookie.test.unit;
 
-import java.io.UnsupportedEncodingException;
-
 import javax.servlet.http.Cookie;
 
 import org.jscookie.Cookies;
@@ -33,7 +31,7 @@ public class CookiesDecodingTest extends BaseTest {
 	}
 
 	@Test
-	public void character_with_3_bytes() throws UnsupportedEncodingException {
+	public void character_with_3_bytes() {
 		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
 				new Cookie("c", "%E4%BA%AC")
 		});

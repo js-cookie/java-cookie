@@ -1,5 +1,6 @@
 package org.jscookie;
 
+import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -271,8 +272,23 @@ public final class Cookies implements CookiesDefinition {
 				continue;
 			}
 
-			String hex = "%" + Integer.toHexString( character ).toUpperCase();
-			encoded = encoded.replace( character.toString(), hex );
+			try {
+				CharArrayWriter hexSequence = new CharArrayWriter();
+				byte[] bytes = character.toString().getBytes( StandardCharsets.UTF_8.name() );
+				for ( int bytesIndex = 0; bytesIndex < bytes.length; bytesIndex++ ) {
+					char left = Character.forDigit( bytes[ bytesIndex ] >> 4 & 0xF, 16 );
+					char right = Character.forDigit( bytes[ bytesIndex ] & 0xF, 16 );
+					hexSequence
+						.append( '%' )
+						.append( left )
+						.append( right );
+				}
+				String target = character.toString();
+				String sequence = hexSequence.toString().toUpperCase();
+				encoded = encoded.replace( target, sequence );
+			} catch ( UnsupportedEncodingException e ) {
+				e.printStackTrace();
+			}
 		}
 		return encoded;
 	}

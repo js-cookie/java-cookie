@@ -53,4 +53,15 @@ public class CookiesEncodingTest extends BaseTest {
 			actual.getName()
 		);
 	}
+
+	@Test
+	public void character_with_3_bytes() {
+		cookies.set( "c", "京" );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "%E4%BA%AC", actual.getValue() );
+	}
 }
