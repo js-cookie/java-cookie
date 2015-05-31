@@ -1,6 +1,8 @@
 package org.jscookie;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -276,18 +278,28 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private String decode( String encoded ) {
+		String decoded = encoded;
 		Pattern pattern = Pattern.compile( "(%[0-9A-Z]{2})+" );
 		Matcher matcher = pattern.matcher( encoded );
 		if ( !matcher.matches() ) {
-			return encoded;
+			return decoded;
 		}
 		for ( int groupIndex = 0; groupIndex < matcher.groupCount(); groupIndex++ ) {
-			String character = matcher.group( groupIndex );
-			String hexChar = character.substring( 1, character.length() );
-			Character decoded = ( char )Integer.parseInt( hexChar, 16 );
-			encoded = encoded.replace( character, decoded.toString() );
+			String encodedChar = matcher.group( groupIndex );
+			String[] encodedBytes = encodedChar.split( "%" );
+			byte[] bytes = new byte[ encodedBytes.length - 1 ];
+			for ( int i = 1; i < encodedBytes.length; i++ ) {
+				String encodedByte = encodedBytes[ i ];
+				bytes[ i - 1 ] = ( byte )Integer.parseInt( encodedByte, 16 );
+			}
+			try {
+				String decodedChar = new String( bytes, StandardCharsets.UTF_8.toString() );
+				decoded = decoded.replace( encodedChar, decodedChar );
+			} catch ( UnsupportedEncodingException e ) {
+				e.printStackTrace();
+			}
 		}
-		return encoded;
+		return decoded;
 	}
 
 	private String decodeValue( Cookie cookie, String decodedName ) {
