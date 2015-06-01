@@ -1,6 +1,6 @@
 package org.jscookie;
 
-abstract class ConverterStrategy {
+interface ConverterStrategy {
 	/**
 	 * Apply the decoding strategy of a cookie. The return will be used as the cookie value
 	 * 

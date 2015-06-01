@@ -405,5 +405,5 @@ public final class Cookies implements CookiesDefinition {
 		}
 	}
 
-	public static abstract class Converter extends ConverterStrategy {}
+	public static abstract class Converter implements ConverterStrategy {}
 }
