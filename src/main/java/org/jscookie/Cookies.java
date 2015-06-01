@@ -30,13 +30,13 @@ public final class Cookies implements CookiesDefinition {
 	private static ResourceBundle lStrings = ResourceBundle.getBundle( LSTRING_FILE );
 
 	private Cookies( HttpServletRequest request, HttpServletResponse response, ConverterStrategy converter ) {
-		this( request, response );
+		this.request = request;
+		this.response = response;
 		this.converter = converter;
 	}
 
-	public Cookies( HttpServletRequest request, HttpServletResponse response ) {
-		this.request = request;
-		this.response = response;
+	public static Cookies initFromServlet( HttpServletRequest request, HttpServletResponse response ) {
+		return new Cookies( request, response, null );
 	}
 
 	@Override

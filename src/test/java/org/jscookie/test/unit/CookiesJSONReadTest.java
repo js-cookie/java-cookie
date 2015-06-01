@@ -23,7 +23,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Before
 	public void before() {
-		cookies = new Cookies( request, response );
+		cookies = Cookies.initFromServlet( request, response );
 	}
 
 	@Test

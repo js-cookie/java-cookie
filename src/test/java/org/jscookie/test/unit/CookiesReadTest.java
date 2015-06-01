@@ -19,7 +19,7 @@ public class CookiesReadTest extends BaseTest {
 
 	@Before
 	public void before() {
-		cookies = new Cookies( request, response );
+		cookies = Cookies.initFromServlet( request, response );
 	}
 
 	@Test

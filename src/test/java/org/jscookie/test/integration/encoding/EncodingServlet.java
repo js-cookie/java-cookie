@@ -23,7 +23,7 @@ public class EncodingServlet extends HttpServlet {
 		System.out.println( "--------------------" );
 		System.out.println( "Testing: " + name );
 
-		Cookies cookies = new Cookies( request, response );
+		Cookies cookies = Cookies.initFromServlet( request, response );
 		String value = cookies.get( name );
 
 		if ( value == null ) {
