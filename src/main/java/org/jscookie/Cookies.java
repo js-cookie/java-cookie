@@ -25,13 +25,13 @@ public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private AttributesDefinition defaults = Attributes.empty().path( "/" );
-	private CookiesDefinition.Converter converter;
+	private ConverterStrategy converter;
 	private ObjectMapper mapper = new ObjectMapper();
 
 	private static final String LSTRING_FILE = "javax.servlet.http.LocalStrings";
 	private static ResourceBundle lStrings = ResourceBundle.getBundle( LSTRING_FILE );
 
-	private Cookies( HttpServletRequest request, HttpServletResponse response, CookiesDefinition.Converter converter ) {
+	private Cookies( HttpServletRequest request, HttpServletResponse response, ConverterStrategy converter ) {
 		this( request, response );
 		this.converter = converter;
 	}
@@ -234,7 +234,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public Cookies withConverter( CookiesDefinition.Converter converter ) {
+	public Cookies withConverter( ConverterStrategy converter ) {
 		return new Cookies( request, response, converter );
 	}
 
@@ -405,5 +405,5 @@ public final class Cookies implements CookiesDefinition {
 		}
 	}
 
-	public static abstract class Converter extends CookiesDefinition.Converter {}
+	public static abstract class Converter extends ConverterStrategy {}
 }
