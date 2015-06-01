@@ -340,7 +340,7 @@ public final class Cookies implements CookiesDefinition {
 		private Expiration expires;
 		private String path;
 		private String domain;
-		private Boolean secure;
+		private boolean secure;
 
 		private Attributes() {}
 
@@ -379,11 +379,10 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		@Override
-		@Nullable
-		Boolean secure() {
+		boolean secure() {
 			return secure;
 		}
-		public Attributes secure( @Nullable Boolean secure ) {
+		public Attributes secure( boolean secure ) {
 			this.secure = secure;
 			return this;
 		}
@@ -395,12 +394,10 @@ public final class Cookies implements CookiesDefinition {
 			if ( reference.domain() != null ) {
 				domain = reference.domain();
 			}
-			if ( reference.secure() != null ) {
-				secure = reference.secure();
-			}
 			if ( reference.expires() != null ) {
 				expires = reference.expires();
 			}
+			secure = reference.secure();
 			return this;
 		}
 	}
