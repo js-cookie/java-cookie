@@ -50,40 +50,40 @@ interface CookiesDefinition {
 	 * 
 	 * @see #get(String)
 	 */
-	void set( String name, String value, Attributes attributes );
+	void set( String name, String value, AttributesDefinition attributes );
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
 	 * 
-	 * @see #set(String, String, Attributes)
+	 * @see #set(String, String, AttributesDefinition)
 	 */
-	void set( String name, int value, Attributes attributes ) throws CookieSerializationException;
+	void set( String name, int value, AttributesDefinition attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
 	 * 
-	 * @see #set(String, String, Attributes)
+	 * @see #set(String, String, AttributesDefinition)
 	 */
-	void set( String name, boolean value, Attributes attributes ) throws CookieSerializationException;
+	void set( String name, boolean value, AttributesDefinition attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
 	 * 
-	 * @see #set(String, String, Attributes)
+	 * @see #set(String, String, AttributesDefinition)
 	 */
-	<T> void set( String name, List<T> value, Attributes attributes ) throws CookieSerializationException;
+	<T> void set( String name, List<T> value, AttributesDefinition attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie extending the default attributes and serializing the typed value
 	 * 
-	 * @see #set(String, String, Attributes)
+	 * @see #set(String, String, AttributesDefinition)
 	 */
-	void set( String name, CookieValue value, Attributes attributes ) throws CookieSerializationException;
+	void set( String name, CookieValue value, AttributesDefinition attributes ) throws CookieSerializationException;
 
 	/**
 	 * Create or update an existing cookie using the default attributes
 	 * 
-	 * @see #set(String, String, Attributes)
+	 * @see #set(String, String, AttributesDefinition)
 	 */
 	void set( String name, String value );
 
@@ -126,35 +126,28 @@ interface CookiesDefinition {
 	 * 
 	 * @see #get(String)
 	 */
-	void remove( String name, Attributes attributes );
+	void remove( String name, AttributesDefinition attributes );
 
 	/**
 	 * Remove an existing cookie using the default attributes
 	 * 
-	 * @see #remove(String, Attributes) 
+	 * @see #remove(String, AttributesDefinition) 
 	 */
 	void remove( String name );
 
 	/**
 	 * Change the default attributes of this instance
 	 */
-	void setDefaults( Attributes attributes );
+	void setDefaults( AttributesDefinition attributes );
 
 	/**
 	 * Create a new instance of the api that overrides the default decoding implementation<br>
 	 * All methods that rely in a proper decoding to work, such as
-	 * {@link #remove(String, Attributes)} and {@link #get(String)}, will run the converter first
+	 * {@link #remove(String, AttributesDefinition)} and {@link #get(String)}, will run the converter first
 	 * for each cookie.<br>
 	 * The returning String will be used as the cookie value.
 	 */
 	CookiesDefinition withConverter( Converter converter );
-
-	abstract class Attributes {
-		abstract Expiration expires();
-		abstract String path();
-		abstract String domain();
-		abstract Boolean secure();
-	}
 
 	abstract class Converter {
 		/**

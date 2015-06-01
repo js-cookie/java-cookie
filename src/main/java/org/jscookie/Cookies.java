@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private CookiesDefinition.Attributes defaults = Attributes.empty().path( "/" );
+	private AttributesDefinition defaults = Attributes.empty().path( "/" );
 	private CookiesDefinition.Converter converter;
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -104,7 +104,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public synchronized void set( String name, String value, CookiesDefinition.Attributes attributes ) {
+	public synchronized void set( String name, String value, AttributesDefinition attributes ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -145,17 +145,17 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void set( String name, int value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+	public void set( String name, int value, AttributesDefinition attributes ) throws CookieSerializationException {
 		set( name, String.valueOf( value ), attributes );
 	}
 
 	@Override
-	public void set( String name, boolean value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+	public void set( String name, boolean value, AttributesDefinition attributes ) throws CookieSerializationException {
 		set( name, String.valueOf( value ), attributes );
 	}
 
 	@Override
-	public <T> void set( String name, List<T> value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+	public <T> void set( String name, List<T> value, AttributesDefinition attributes ) throws CookieSerializationException {
 		try {
 			set( name, mapper.writeValueAsString( value ), attributes );
 		} catch ( JsonProcessingException e ) {
@@ -164,7 +164,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void set( String name, CookieValue value, CookiesDefinition.Attributes attributes ) throws CookieSerializationException {
+	public void set( String name, CookieValue value, AttributesDefinition attributes ) throws CookieSerializationException {
 		try {
 			set( name, mapper.writeValueAsString( value ), attributes );
 		} catch ( JsonProcessingException e ) {
@@ -204,7 +204,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void remove( String name, CookiesDefinition.Attributes attributes ) {
+	public void remove( String name, AttributesDefinition attributes ) {
 		if ( name == null || name.length() == 0 ) {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
@@ -226,7 +226,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void setDefaults( CookiesDefinition.Attributes defaults ) {
+	public void setDefaults( AttributesDefinition defaults ) {
 		if ( defaults == null ) {
 			throw new IllegalArgumentException();
 		}
@@ -238,7 +238,7 @@ public final class Cookies implements CookiesDefinition {
 		return new Cookies( request, response, converter );
 	}
 
-	private Attributes extend( CookiesDefinition.Attributes a, CookiesDefinition.Attributes b ) {
+	private Attributes extend( AttributesDefinition a, AttributesDefinition b ) {
 		return Attributes.empty().merge( a ).merge( b );
 	}
 
@@ -336,7 +336,7 @@ public final class Cookies implements CookiesDefinition {
 		return decodedValue;
 	}
 
-	public static class Attributes extends CookiesDefinition.Attributes {
+	public static class Attributes extends AttributesDefinition {
 		private Expiration expires;
 		private String path;
 		private String domain;
@@ -388,7 +388,7 @@ public final class Cookies implements CookiesDefinition {
 			return this;
 		}
 
-		private Attributes merge( CookiesDefinition.Attributes reference ) {
+		private Attributes merge( AttributesDefinition reference ) {
 			if ( reference.path() != null ) {
 				path = reference.path();
 			}
