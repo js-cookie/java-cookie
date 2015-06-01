@@ -15,8 +15,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -349,31 +347,28 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		@Override
-		@Nullable
 		Expiration expires() {
 			return expires;
 		}
-		public Attributes expires( @Nullable Expiration expires ) {
+		public Attributes expires( Expiration expires ) {
 			this.expires = expires;
 			return this;
 		}
 
 		@Override
-		@Nullable
 		String path() {
 			return path;
 		}
-		public Attributes path( @Nullable String path ) {
+		public Attributes path( String path ) {
 			this.path = path;
 			return this;
 		}
 
 		@Override
-		@Nullable
 		String domain() {
 			return domain;
 		}
-		public Attributes domain( @Nullable String domain ) {
+		public Attributes domain( String domain ) {
 			this.domain = domain;
 			return this;
 		}
