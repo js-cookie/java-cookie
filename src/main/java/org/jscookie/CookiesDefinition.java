@@ -136,9 +136,9 @@ interface CookiesDefinition {
 	void remove( String name );
 
 	/**
-	 * Change the default attributes of this instance
+	 * Retrieve the default attributes of this instance
 	 */
-	void setDefaults( AttributesDefinition attributes );
+	AttributesDefinition defaults();
 
 	/**
 	 * Create a new instance of the api that overrides the default decoding implementation<br>

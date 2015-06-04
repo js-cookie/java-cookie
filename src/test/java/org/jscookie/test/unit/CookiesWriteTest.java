@@ -28,7 +28,7 @@ public class CookiesWriteTest extends BaseTest {
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
 		Mockito.verify( response ).addCookie( argument.capture() );
-		
+
 		Cookie actual = argument.getValue();
 		Assert.assertEquals( "c", actual.getName() );
 		Assert.assertEquals( "v", actual.getValue() );
@@ -40,12 +40,11 @@ public class CookiesWriteTest extends BaseTest {
 
 	@Test
 	public void simple_write_with_default_attributes() {
-		cookies.setDefaults(Cookies.Attributes.empty()
+		cookies.defaults()
 			.path( "/" )
 			.domain( "site.com" )
 			.secure( true )
-			.expires( Expiration.days( 1 ) )
-		);
+			.expires( Expiration.days( 1 ) );
 		cookies.set( "c", "v" );
 
 		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
@@ -83,10 +82,9 @@ public class CookiesWriteTest extends BaseTest {
 
 	@Test
 	public void simple_write_overriding_default_attributes() {
-		cookies.setDefaults(Cookies.Attributes.empty()
+		cookies.defaults()
 			.path( "/path/" )
-			.secure( true )
-		);
+			.secure( true );
 		cookies.set( "c", "v", Cookies.Attributes.empty()
 			.path( "/" )
 		);

@@ -1,8 +1,12 @@
 package org.jscookie;
 
 public abstract class AttributesDefinition {
+	public abstract AttributesDefinition expires( Expiration expiration );
 	abstract Expiration expires();
+	public abstract AttributesDefinition path( String path );
 	abstract String path();
+	public abstract AttributesDefinition domain( String domain );
 	abstract String domain();
-	abstract boolean secure();
+	public abstract AttributesDefinition secure( Boolean secure );
+	abstract Boolean secure();
 }

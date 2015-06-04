@@ -224,11 +224,8 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	@Override
-	public void setDefaults( AttributesDefinition defaults ) {
-		if ( defaults == null ) {
-			throw new IllegalArgumentException();
-		}
-		this.defaults = defaults;
+	public AttributesDefinition defaults() {
+		return this.defaults;
 	}
 
 	@Override
@@ -338,7 +335,7 @@ public final class Cookies implements CookiesDefinition {
 		private Expiration expires;
 		private String path;
 		private String domain;
-		private boolean secure;
+		private Boolean secure;
 
 		private Attributes() {}
 
@@ -350,6 +347,7 @@ public final class Cookies implements CookiesDefinition {
 		Expiration expires() {
 			return expires;
 		}
+		@Override
 		public Attributes expires( Expiration expires ) {
 			this.expires = expires;
 			return this;
@@ -359,6 +357,7 @@ public final class Cookies implements CookiesDefinition {
 		String path() {
 			return path;
 		}
+		@Override
 		public Attributes path( String path ) {
 			this.path = path;
 			return this;
@@ -368,16 +367,18 @@ public final class Cookies implements CookiesDefinition {
 		String domain() {
 			return domain;
 		}
+		@Override
 		public Attributes domain( String domain ) {
 			this.domain = domain;
 			return this;
 		}
 
 		@Override
-		boolean secure() {
+		Boolean secure() {
 			return secure;
 		}
-		public Attributes secure( boolean secure ) {
+		@Override
+		public Attributes secure( Boolean secure ) {
 			this.secure = secure;
 			return this;
 		}
@@ -392,7 +393,9 @@ public final class Cookies implements CookiesDefinition {
 			if ( reference.expires() != null ) {
 				expires = reference.expires();
 			}
-			secure = reference.secure();
+			if ( reference.secure() != null ) {
+				secure = reference.secure();
+			}
 			return this;
 		}
 	}
