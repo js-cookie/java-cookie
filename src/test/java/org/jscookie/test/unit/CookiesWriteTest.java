@@ -113,4 +113,19 @@ public class CookiesWriteTest extends BaseTest {
 		Assert.assertEquals( "v", actual.getValue() );
 		Assert.assertEquals( "should fallback to whole site if removed", "/", actual.getPath() );
 	}
+
+	@Test
+	public void should_not_write_the_path_attribute_if_set_as_an_empty_string() {
+		cookies.defaults()
+			.path( "" );
+		cookies.set( "c", "v" );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "c", actual.getName() );
+		Assert.assertEquals( "v", actual.getValue() );
+		Assert.assertEquals( "should not send the path", null, actual.getPath() );
+	}
 }

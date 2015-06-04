@@ -125,7 +125,7 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		String path = attributes.path();
-		if ( path != null ) {
+		if ( path != null && !path.isEmpty() ) {
 			cookie.setPath( path );
 		}
 
