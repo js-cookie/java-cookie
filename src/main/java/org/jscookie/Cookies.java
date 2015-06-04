@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class Cookies implements CookiesDefinition {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
-	private AttributesDefinition defaults = Attributes.empty().path( "/" );
+	private AttributesDefinition defaults = Attributes.empty();
 	private ConverterStrategy converter;
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -117,7 +117,7 @@ public final class Cookies implements CookiesDefinition {
 		String encodedValue = encode( value );
 
 		Cookie cookie = new Cookie( encodedName, encodedValue );
-		attributes = extend( defaults, attributes );
+		attributes = extend( Attributes.empty().path( "/" ), defaults, attributes );
 
 		Expiration expires = attributes.expires();
 		if ( expires != null ) {
@@ -233,8 +233,12 @@ public final class Cookies implements CookiesDefinition {
 		return new Cookies( request, response, converter );
 	}
 
-	private Attributes extend( AttributesDefinition a, AttributesDefinition b ) {
-		return Attributes.empty().merge( a ).merge( b );
+	private Attributes extend( AttributesDefinition... mergeables ) {
+		Attributes result = Attributes.empty();
+		for ( AttributesDefinition mergeable : mergeables ) {
+			result.merge( mergeable );
+		}
+		return result;
 	}
 
 	private String encode( String plain ) {

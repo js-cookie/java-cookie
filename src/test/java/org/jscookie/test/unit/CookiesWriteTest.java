@@ -98,4 +98,19 @@ public class CookiesWriteTest extends BaseTest {
 		Assert.assertEquals( "/", actual.getPath() );
 		Assert.assertEquals( "should consider default if not overriden", true, actual.getSecure() );
 	}
+
+	@Test
+	public void removing_default_path_should_fallback_to_whole_site() {
+		cookies.defaults()
+			.path( null );
+		cookies.set( "c", "v" );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "c", actual.getName() );
+		Assert.assertEquals( "v", actual.getValue() );
+		Assert.assertEquals( "should fallback to whole site if removed", "/", actual.getPath() );
+	}
 }
