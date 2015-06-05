@@ -49,7 +49,6 @@ public class CookiesEncodingIT {
 					.loadPomFromFile( "pom.xml" )
 					.resolve(
 						"joda-time:joda-time",
-						"org.eclipse.jdt:org.eclipse.jdt.annotation",
 						"com.fasterxml.jackson.core:jackson-databind"
 					)
 					.withTransitivity()
