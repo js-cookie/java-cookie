@@ -233,10 +233,10 @@ public final class Cookies implements CookiesDefinition {
 		return result;
 	}
 
-	private String encode( String plain ) {
-		String encoded = plain;
-		for ( int i = 0; i < plain.length(); i++ ) {
-			Character character = plain.charAt( i );
+	private String encode( String decoded ) {
+		String encoded = decoded;
+		for ( int i = 0; i < decoded.length(); i++ ) {
+			Character character = decoded.charAt( i );
 
 			boolean isDigit = Character.isDigit( character );
 			if ( isDigit ) {
@@ -306,19 +306,19 @@ public final class Cookies implements CookiesDefinition {
 		return decoded;
 	}
 
-	private String decodeValue( String plainValue, String decodedName ) {
+	private String decodeValue( String encodedValue, String decodedName ) {
 		String decodedValue = null;
 
 		if ( converter != null ) {
 			try {
-				decodedValue = converter.convert( plainValue, decodedName );
+				decodedValue = converter.convert( encodedValue, decodedName );
 			} catch ( ConverterException e ) {
 				e.printStackTrace();
 			}
 		}
 
 		if ( decodedValue == null ) {
-			decodedValue = decode( plainValue );
+			decodedValue = decode( encodedValue );
 		}
 
 		return decodedValue;
