@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,7 +108,7 @@ public final class Cookies implements CookiesDefinition {
 		}
 
 		String encodedName = encode( name );
-		String encodedValue = encode( value );
+		String encodedValue = encodeValue( value );
 
 		Cookie cookie = new Cookie( encodedName, encodedValue );
 		attributes = extend( Attributes.empty().path( "/" ), defaults, attributes );
@@ -234,6 +236,10 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private String encode( String decoded ) {
+		return encode( decoded, new HashSet<Character>() );
+	}
+
+	private String encode( String decoded, Set<Character> exceptions ) {
 		String encoded = decoded;
 		for ( int i = 0; i < decoded.length(); i++ ) {
 			Character character = decoded.charAt( i );
@@ -260,6 +266,10 @@ public final class Cookies implements CookiesDefinition {
 					character == '^' || character == '_'  || character == '`' ||
 					character == '|' || character == '~';
 			if ( isAllowed ) {
+				continue;
+			}
+
+			if ( exceptions.contains( character ) ) {
 				continue;
 			}
 
@@ -304,6 +314,36 @@ public final class Cookies implements CookiesDefinition {
 			}
 		}
 		return decoded;
+	}
+
+	private String encodeValue( String decodedValue ) {
+		Set<Character> exceptions = new HashSet<>();
+		for ( int i = 0; i < decodedValue.length(); i++ ) {
+			char character = decodedValue.charAt( i );
+			boolean isIgnorable = false;
+
+			if ( character == '/' || character == ':' ) {
+				isIgnorable = true;
+			}
+
+			if ( character >= '<' && character <= '@' ) {
+				isIgnorable = true;
+			}
+
+			if ( character == '[' || character == ']' ) {
+				isIgnorable = true;
+			}
+
+			if ( character == '{' || character == '}' ) {
+				isIgnorable = true;
+			}
+
+			if ( isIgnorable ) {
+				exceptions.add( character );
+			}
+		}
+
+		return encode( decodedValue, exceptions );
 	}
 
 	private String decodeValue( String encodedValue, String decodedName ) {

@@ -64,4 +64,15 @@ public class CookiesEncodingTest extends BaseTest {
 		Cookie actual = argument.getValue();
 		Assert.assertEquals( "%E4%BA%AC", actual.getValue() );
 	}
+
+	@Test
+	public void characters_allowed_in_cookie_value() {
+		cookies.set( "c", "/:<=>?@[]{}" );
+
+		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
+		Mockito.verify( response ).addCookie( argument.capture() );
+
+		Cookie actual = argument.getValue();
+		Assert.assertEquals( "/:<=>?@[]{}", actual.getValue() );
+	}
 }

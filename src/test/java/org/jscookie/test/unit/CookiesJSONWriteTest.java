@@ -55,7 +55,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Mockito.verify( response ).addCookie( argument.capture() );
 
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%5B%22v%22%5D", actual.getValue() );
+		Assert.assertEquals( "[%22v%22]", actual.getValue() );
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Mockito.verify( response ).addCookie( argument.capture() );
 
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%7B%22property%22%3A%22v%22%7D", actual.getValue() );
+		Assert.assertEquals( "{%22property%22:%22v%22}", actual.getValue() );
 	}
 
 	@Test
@@ -77,7 +77,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Mockito.verify( response ).addCookie( argument.capture() );
 
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%7B%22property%22%3Atrue%7D", actual.getValue() );
+		Assert.assertEquals( "{%22property%22:true}", actual.getValue() );
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class CookiesJSONWriteTest extends BaseTest {
 		Mockito.verify( response ).addCookie( argument.capture() );
 
 		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%7B%22property%22%3A1%7D", actual.getValue() );
+		Assert.assertEquals( "{%22property%22:1}", actual.getValue() );
 	}
 
 	class CustomTypeString implements CookieValue {
