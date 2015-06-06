@@ -45,19 +45,17 @@ public final class Cookies implements CookiesDefinition {
 			throw new IllegalArgumentException( lStrings.getString( "err.cookie_name_blank" ) );
 		}
 
-		Cookie[] cookies = request.getCookies();
-		if ( cookies == null ) {
+		String cookieHeader = request.getHeader( "cookie" );
+		if ( cookieHeader == null ) {
 			return null;
 		}
 
-		for ( Cookie cookie : cookies ) {
-			String decodedName = decode( cookie.getName() );
-
+		Map<String, String> cookies = getCookies( cookieHeader );
+		for ( String decodedName : cookies.keySet() ) {
 			if ( !name.equals( decodedName ) ) {
 				continue;
 			}
-			
-			return decodeValue( cookie, decodedName );
+			return cookies.get( decodedName );
 		}
 
 		return null;
@@ -87,18 +85,12 @@ public final class Cookies implements CookiesDefinition {
 	public Map<String, String> get() {
 		Map<String, String> result = new HashMap<String, String>();
 
-		Cookie[] cookies = request.getCookies();
-		if ( cookies == null ) {
-			return null;
+		String cookieHeader = request.getHeader( "cookie" );
+		if ( cookieHeader == null ) {
+			return result;
 		}
 
-		for ( Cookie cookie : cookies ) {
-			String decodedName = decode( cookie.getName() );
-			String decodedValue = decodeValue( cookie, decodedName );
-			result.put( decodedName, decodedValue );
-		}
-
-		return result;
+		return getCookies( cookieHeader );
 	}
 
 	@Override
@@ -296,11 +288,8 @@ public final class Cookies implements CookiesDefinition {
 		String decoded = encoded;
 		Pattern pattern = Pattern.compile( "(%[0-9A-Z]{2})+" );
 		Matcher matcher = pattern.matcher( encoded );
-		if ( !matcher.matches() ) {
-			return decoded;
-		}
-		for ( int groupIndex = 0; groupIndex < matcher.groupCount(); groupIndex++ ) {
-			String encodedChar = matcher.group( groupIndex );
+		while ( matcher.find() ) {
+			String encodedChar = matcher.group();
 			String[] encodedBytes = encodedChar.split( "%" );
 			byte[] bytes = new byte[ encodedBytes.length - 1 ];
 			for ( int i = 1; i < encodedBytes.length; i++ ) {
@@ -317,22 +306,37 @@ public final class Cookies implements CookiesDefinition {
 		return decoded;
 	}
 
-	private String decodeValue( Cookie cookie, String decodedName ) {
+	private String decodeValue( String plainValue, String decodedName ) {
 		String decodedValue = null;
 
 		if ( converter != null ) {
 			try {
-				decodedValue = converter.convert( cookie.getValue(), decodedName );
+				decodedValue = converter.convert( plainValue, decodedName );
 			} catch ( ConverterException e ) {
 				e.printStackTrace();
 			}
 		}
 
 		if ( decodedValue == null ) {
-			decodedValue = decode( cookie.getValue() );
+			decodedValue = decode( plainValue );
 		}
 
 		return decodedValue;
+	}
+
+	private Map<String, String> getCookies( String cookieHeader ) {
+		Map<String, String> result = new HashMap<>();
+		String[] cookies = cookieHeader.split( "; " );
+		for ( int i = 0; i < cookies.length; i++ ) {
+			String cookie = cookies[ i ];
+			String encodedName = cookie.split( "=" )[ 0 ];
+			String decodedName = decode( encodedName );
+
+			String encodedValue = cookie.substring( cookie.indexOf( '=' ) + 1, cookie.length() );
+			String decodedValue = decodeValue( encodedValue, decodedName );
+			result.put( decodedName, decodedValue );
+		}
+		return result;
 	}
 
 	public static class Attributes extends AttributesDefinition {

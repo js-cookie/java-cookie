@@ -2,8 +2,6 @@ package org.jscookie.test.unit;
 
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Assert;
@@ -24,9 +22,7 @@ public class CookiesReadTest extends BaseTest {
 
 	@Test
 	public void simple_value() {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "v" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=v" );
 		String actual = cookies.get( "c" );
 		String expected = "v";
 		Assert.assertEquals( expected, actual );
@@ -34,10 +30,7 @@ public class CookiesReadTest extends BaseTest {
 
 	@Test
 	public void read_all() {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "v" ),
-			new Cookie( "foo", "bar" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=v; foo=bar" );
 		Map<String, String> result = cookies.get();
 
 		String actual = result.get( "c" );
@@ -46,6 +39,15 @@ public class CookiesReadTest extends BaseTest {
 
 		actual = result.get( "foo" );
 		expected = "bar";
+		Assert.assertEquals( expected, actual );
+	}
+
+	@Test
+	public void equal_sign_in_cookie_name() {
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=a=b" );
+
+		String actual = cookies.get( "c" );
+		String expected = "a=b";
 		Assert.assertEquals( expected, actual );
 	}
 }

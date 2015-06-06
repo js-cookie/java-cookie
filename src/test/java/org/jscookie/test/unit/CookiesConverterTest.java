@@ -3,7 +3,6 @@ package org.jscookie.test.unit;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import javax.servlet.http.Cookie;
 
 import org.jscookie.ConverterException;
 import org.jscookie.Cookies;
@@ -26,10 +25,9 @@ public class CookiesConverterTest extends BaseTest {
 
 	@Test
 	public void should_be_able_to_conditionally_decode_a_single_malformed_cookie() {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "escaped", "%u5317" ),
-			new Cookie( "encoded", "%E4%BA%AC" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn(
+			"escaped=%u5317; encoded=%E4%BA%AC"
+		);
 		Cookies cookies = this.cookies.withConverter(new Cookies.Converter() {
 			@Override
 			public String convert( String value, String name ) throws ConverterException {

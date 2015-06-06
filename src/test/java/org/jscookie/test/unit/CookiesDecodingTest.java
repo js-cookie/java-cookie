@@ -1,7 +1,5 @@
 package org.jscookie.test.unit;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Assert;
@@ -22,9 +20,7 @@ public class CookiesDecodingTest extends BaseTest {
 
 	@Test
 	public void character_not_allowed_in_name_and_value() {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "%3B", "%3B" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "%3B=%3B" );
 		String actual = cookies.get( ";" );
 		String expected = ";";
 		Assert.assertEquals( expected, actual );
@@ -32,9 +28,7 @@ public class CookiesDecodingTest extends BaseTest {
 
 	@Test
 	public void character_with_3_bytes() {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-				new Cookie("c", "%E4%BA%AC")
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=%E4%BA%AC" );
 		String actual = cookies.get( "c" );
 		String expected = "京";
 		Assert.assertEquals( expected, actual );

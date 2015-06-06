@@ -2,8 +2,6 @@ package org.jscookie.test.unit;
 
 import java.util.List;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.CookieParseException;
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
@@ -28,9 +26,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_int_type() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "1" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=1" );
 
 		String actual = cookies.get( "c" );
 		String expected = "1";
@@ -43,9 +39,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_boolean_type() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "true" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=true" );
 
 		String actual = cookies.get( "c" );
 		String expected = "true";
@@ -58,9 +52,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_JSON_array_with_string() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "[\"v\"]" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=[%22v%22]" );
 
 		String actual = cookies.get( "c" );
 		String expected = "[\"v\"]";
@@ -73,9 +65,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_custom_type_with_string_prop() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "{\"property\":\"v\"}" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c={%22property%22:%22v%22}" );
 
 		String actual = cookies.get( "c" );
 		String expected = "{\"property\":\"v\"}";
@@ -88,9 +78,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_custom_type_with_boolean_prop() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "{\"property\":true}" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c={%22property%22:true}" );
 
 		String actual = cookies.get( "c" );
 		String expected = "{\"property\":true}";
@@ -103,9 +91,7 @@ public class CookiesJSONReadTest extends BaseTest {
 
 	@Test
 	public void read_custom_type_with_number_prop() throws CookieParseException {
-		Mockito.when( request.getCookies() ).thenReturn(new Cookie[] {
-			new Cookie( "c", "{\"property\":1}" )
-		});
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c={%22property%22:1}" );
 
 		String actual = cookies.get( "c" );
 		String expected = "{\"property\":1}";
