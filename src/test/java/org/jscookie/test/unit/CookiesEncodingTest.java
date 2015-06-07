@@ -42,6 +42,12 @@ public class CookiesEncodingTest extends BaseTest {
 	}
 
 	@Test
+	public void character_with_3_bytes_in_name() {
+		cookies.set( "京", "v" );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "%E4%BA%AC=v; Path=/" );
+	}
+
+	@Test
 	public void characters_allowed_in_cookie_value() {
 		cookies.set( "c", "/:<=>?@[]{}" );
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=/:<=>?@[]{}; Path=/" );
