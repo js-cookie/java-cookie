@@ -145,7 +145,7 @@ public final class Cookies implements CookiesDefinition {
 			return;
 		}
 
-		response.addHeader( "Set-Cookie", header.toString() );
+		setCookie( header.toString(), response );
 	}
 
 	@Override
@@ -245,6 +245,13 @@ public final class Cookies implements CookiesDefinition {
 			result.merge( mergeable );
 		}
 		return result;
+	}
+
+	private void setCookie( String cookieValue, HttpServletResponse response ) {
+		if ( response.getHeaders( "Set-Cookie" ).contains( cookieValue ) ) {
+			return;
+		}
+		response.addHeader( "Set-Cookie", cookieValue );
 	}
 
 	private String encode( String decoded ) {

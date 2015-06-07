@@ -1,6 +1,5 @@
 package org.jscookie.test.integration.encoding;
 
-import java.io.File;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -14,10 +13,10 @@ import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jscookie.test.integration.qunit.QUnitPageObject;
 import org.jscookie.test.integration.qunit.QUnitResults;
 import org.jscookie.test.integration.test.utils.Debug;
+import org.jscookie.test.unit.utils.IntegrationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,26 +30,12 @@ public class CookiesEncodingIT {
 
 	@Deployment
 	public static Archive<?> createDeployment() {
-		boolean RECURSIVE_TRUE = true;
-
 		GenericArchive qunitFiles = ShrinkWrap.create( GenericArchive.class )
 			.as( ExplodedImporter.class )
 			.importDirectory( "bower_components/js-cookie/" )
 			.as( GenericArchive.class );
 
-		WebArchive war = ShrinkWrap.create( WebArchive.class )
-			.addPackage( "org.jscookie" )
-			.addPackages( RECURSIVE_TRUE, "org.jscookie.test.integration" )
-			.addAsLibraries(
-				Maven.resolver()
-					.loadPomFromFile( "pom.xml" )
-					.resolve(
-						"joda-time:joda-time",
-						"com.fasterxml.jackson.core:jackson-databind"
-					)
-					.withTransitivity()
-					.as( File.class )
-			)
+		WebArchive war = IntegrationUtils.createCommonDeployment()
 			.merge( qunitFiles, "/", Filters.includeAll() );
 
 		System.out.println( " ----- LOGGING THE FILES ADDED TO JBOSS" );
