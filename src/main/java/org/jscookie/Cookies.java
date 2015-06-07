@@ -136,6 +136,11 @@ public final class Cookies implements CookiesDefinition {
 			header.append( "; Secure" );
 		}
 
+		Boolean httpOnly = attributes.httpOnly();
+		if ( Boolean.TRUE.equals( httpOnly ) ) {
+			header.append( "; HttpOnly" );
+		}
+
 		if ( response.isCommitted() ) {
 			return;
 		}
@@ -400,6 +405,7 @@ public final class Cookies implements CookiesDefinition {
 		private String path;
 		private String domain;
 		private Boolean secure;
+		private Boolean httpOnly;
 
 		private Attributes() {}
 
@@ -447,6 +453,16 @@ public final class Cookies implements CookiesDefinition {
 			return this;
 		}
 
+		@Override
+		Boolean httpOnly() {
+			return httpOnly;
+		}
+		@Override
+		public Attributes httpOnly( Boolean httpOnly ) {
+			this.httpOnly = httpOnly;
+			return this;
+		}
+
 		private Attributes merge( AttributesDefinition reference ) {
 			if ( reference.path() != null ) {
 				path = reference.path();
@@ -459,6 +475,9 @@ public final class Cookies implements CookiesDefinition {
 			}
 			if ( reference.secure() != null ) {
 				secure = reference.secure();
+			}
+			if ( reference.httpOnly() != null ) {
+				httpOnly = reference.httpOnly();
 			}
 			return this;
 		}

@@ -9,4 +9,6 @@ public abstract class AttributesDefinition {
 	abstract String domain();
 	public abstract AttributesDefinition secure( Boolean secure );
 	abstract Boolean secure();
+	public abstract AttributesDefinition httpOnly( Boolean httpOnly );
+	abstract Boolean httpOnly();
 }

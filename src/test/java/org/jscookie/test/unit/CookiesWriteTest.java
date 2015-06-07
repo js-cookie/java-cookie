@@ -87,4 +87,12 @@ public class CookiesWriteTest extends BaseTest {
 		);
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Expires=Sun, 07 Jun 2015 23:38:46 GMT" );
 	}
+
+	@Test
+	public void httponly_attribute() {
+		cookies.set( "c", "v", Attributes.empty()
+			.httpOnly( true )
+		);
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; HttpOnly" );
+	}
 }
