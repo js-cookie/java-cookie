@@ -1,23 +1,23 @@
 package org.jscookie;
 
 import java.util.Date;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
-import org.joda.time.Seconds;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public final class Expiration {
-	private final DateTime dateTime;
-	private final Integer days;
+	private DateTimeFormatter EXPIRES_FORMAT = DateTimeFormat
+		.forPattern( "EEE, dd MMM yyyy HH:mm:ss 'GMT'" )
+		.withLocale( Locale.US );
+	private final DateTime date;
 	private Expiration( DateTime dateTime ) {
-		this.dateTime = dateTime;
-		this.days = null;
-	}
-	private Expiration( Integer days ) {
-		this.dateTime = null;
-		this.days = days;
+		this.date = dateTime;
 	}
 	public static Expiration days( int days ) {
-		return new Expiration( days );
+		DateTime withDays = new DateTime().plusDays( days );
+		return new Expiration( withDays );
 	}
 	public static Expiration date( DateTime dateTime ) {
 		if ( dateTime == null ) {
@@ -32,15 +32,7 @@ public final class Expiration {
 		DateTime dateTime = new DateTime( date );
 		return new Expiration( dateTime );
 	}
-	int toSecondsFromNow() {
-		int seconds = 0;
-		if ( days != null ) {
-			int oneDayInSeconds = 86400;
-			seconds = oneDayInSeconds * days;
-		} else if ( dateTime != null ) {
-			Seconds period = Seconds.secondsBetween( DateTime.now(), dateTime );
-			seconds = period.getSeconds();
-		}
-		return seconds;
+	String toExpiresString() {
+		return date.toString( EXPIRES_FORMAT );
 	}
 }

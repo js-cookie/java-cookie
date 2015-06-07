@@ -1,6 +1,8 @@
 package org.jscookie.test.unit;
 
+import org.joda.time.DateTime;
 import org.jscookie.Cookies;
+import org.jscookie.Cookies.Attributes;
 import org.jscookie.Expiration;
 import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Before;
@@ -29,11 +31,9 @@ public class CookiesWriteTest extends BaseTest {
 		cookies.defaults()
 			.path( "/" )
 			.domain( "site.com" )
-			.secure( true )
-			.expires( Expiration.days( 1 ) );
+			.secure( true );
 		cookies.set( "c", "v" );
 
-		// TODO Add expires
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Domain=site.com; Secure" );
 	}
 
@@ -43,10 +43,8 @@ public class CookiesWriteTest extends BaseTest {
 			.path( "/" )
 			.domain( "example.com" )
 			.secure( true )
-			.expires( Expiration.days( 1 ) )
 		);
 
-		// TODO expires
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Domain=example.com; Secure" );
 	}
 
@@ -79,5 +77,14 @@ public class CookiesWriteTest extends BaseTest {
 		cookies.set( "c", "v" );
 
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v" );
+	}
+
+	@Test
+	public void expires_attribute() {
+		DateTime date_2015_06_07_23h38m46s = new DateTime( 2015, 6, 7, 23, 38, 46 );
+		cookies.set( "c", "v", Attributes.empty()
+			.expires( Expiration.date( date_2015_06_07_23h38m46s ) )
+		);
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Expires=Sun, 07 Jun 2015 23:38:46 GMT" );
 	}
 }

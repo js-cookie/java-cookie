@@ -116,14 +116,14 @@ public final class Cookies implements CookiesDefinition {
 
 		attributes = extend( Attributes.empty().path( "/" ), defaults, attributes );
 
-		Expiration expires = attributes.expires();
-		if ( expires != null ) {
-			// TODO
-		}
-
 		String path = attributes.path();
 		if ( path != null && !path.isEmpty() ) {
 			header.append( "; Path=" + path );
+		}
+
+		Expiration expires = attributes.expires();
+		if ( expires != null ) {
+			header.append( "; Expires=" + expires.toExpiresString() );
 		}
 
 		String domain = attributes.domain();
