@@ -243,46 +243,50 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private String encode( String decoded ) {
-		return encode( decoded, new HashSet<Character>() );
+		return encode( decoded, new HashSet<Integer>() );
 	}
 
-	private String encode( String decoded, Set<Character> exceptions ) {
+	private String encode( String decoded, Set<Integer> exceptions ) {
 		String encoded = decoded;
-		for ( int i = 0; i < decoded.length(); i++ ) {
-			Character character = decoded.charAt( i );
+		for ( int i = 0; i < decoded.length(); ) {
+			int codePoint = decoded.codePointAt( i );
+			i += Character.charCount( codePoint );
 
-			boolean isDigit = Character.isDigit( character );
+			boolean isDigit = codePoint >= codePoint( "0" ) && codePoint <= codePoint( "9" );
 			if ( isDigit ) {
 				continue;
 			}
 
-			boolean isAsciiUppercaseLetter = character >= 'A' && character <= 'Z';
+			boolean isAsciiUppercaseLetter = codePoint >= codePoint( "A" ) && codePoint <= codePoint( "Z" );
 			if ( isAsciiUppercaseLetter ) {
 				continue;
 			}
 
-			boolean isAsciiLowercaseLetter = character >= 'a' && character <= 'z';
+			boolean isAsciiLowercaseLetter = codePoint >= codePoint( "a" ) && codePoint <= codePoint( "z" );
 			if ( isAsciiLowercaseLetter ) {
 				continue;
 			}
 
 			boolean isAllowed =
-					character == '!' || character == '#'  || character == '$' ||
-					character == '&' || character == '\'' || character == '*' ||
-					character == '+' || character == '-'  || character == '.' ||
-					character == '^' || character == '_'  || character == '`' ||
-					character == '|' || character == '~';
+					codePoint == codePoint( "!" ) || codePoint == codePoint( "#" ) ||
+					codePoint == codePoint( "$" ) || codePoint == codePoint( "&" ) ||
+					codePoint == codePoint( "'" ) || codePoint == codePoint( "*" ) ||
+					codePoint == codePoint( "+" ) || codePoint == codePoint( "-" ) ||
+					codePoint == codePoint( "." ) || codePoint == codePoint( "^" ) ||
+					codePoint == codePoint( "_" ) || codePoint == codePoint( "`" ) ||
+					codePoint == codePoint( "|" ) || codePoint == codePoint( "~" );
 			if ( isAllowed ) {
 				continue;
 			}
 
-			if ( exceptions.contains( character ) ) {
+			if ( exceptions.contains( codePoint ) ) {
 				continue;
 			}
 
 			try {
+				String character = new String( Character.toChars( codePoint ) );
 				CharArrayWriter hexSequence = new CharArrayWriter();
-				byte[] bytes = character.toString().getBytes( StandardCharsets.UTF_8.name() );
+				byte[] bytes = character.getBytes( StandardCharsets.UTF_8.name() );
 				for ( int bytesIndex = 0; bytesIndex < bytes.length; bytesIndex++ ) {
 					char left = Character.forDigit( bytes[ bytesIndex ] >> 4 & 0xF, 16 );
 					char right = Character.forDigit( bytes[ bytesIndex ] & 0xF, 16 );
@@ -324,33 +328,38 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private String encodeValue( String decodedValue ) {
-		Set<Character> exceptions = new HashSet<>();
-		for ( int i = 0; i < decodedValue.length(); i++ ) {
-			char character = decodedValue.charAt( i );
+		Set<Integer> exceptions = new HashSet<>();
+		for ( int i = 0; i < decodedValue.length(); ) {
+			int codePoint = decodedValue.codePointAt( i );
+			i += Character.charCount( codePoint );
+
 			boolean isIgnorable = false;
-
-			if ( character == '/' || character == ':' ) {
+			if ( codePoint == codePoint( "/" ) || codePoint == codePoint( ":") ) {
 				isIgnorable = true;
 			}
 
-			if ( character >= '<' && character <= '@' ) {
+			if ( codePoint >= codePoint( "<" ) && codePoint <= codePoint( "@" ) ) {
 				isIgnorable = true;
 			}
 
-			if ( character == '[' || character == ']' ) {
+			if ( codePoint == codePoint( "[" ) || codePoint == codePoint( "]" ) ) {
 				isIgnorable = true;
 			}
 
-			if ( character == '{' || character == '}' ) {
+			if ( codePoint == codePoint( "{" ) || codePoint == codePoint( "}" ) ) {
 				isIgnorable = true;
 			}
 
 			if ( isIgnorable ) {
-				exceptions.add( character );
+				exceptions.add( codePoint );
 			}
 		}
 
 		return encode( decodedValue, exceptions );
+	}
+
+	private int codePoint( String character ) {
+		return character.codePointAt( 0 );
 	}
 
 	private String decodeValue( String encodedValue, String decodedName ) {
