@@ -1,0 +1,6 @@
+{
+  "name": "java-cookie",
+  "devDependencies": {
+    "js-cookie": "master"
+  }
+}
