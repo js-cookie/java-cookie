@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -110,30 +109,38 @@ public final class Cookies implements CookiesDefinition {
 		String encodedName = encode( name );
 		String encodedValue = encodeValue( value );
 
-		Cookie cookie = new Cookie( encodedName, encodedValue );
+		StringBuilder header = new StringBuilder();
+		header.append( encodedName );
+		header.append( '=' );
+		header.append( encodedValue );
+
 		attributes = extend( Attributes.empty().path( "/" ), defaults, attributes );
 
 		Expiration expires = attributes.expires();
 		if ( expires != null ) {
-			cookie.setMaxAge( expires.toSecondsFromNow() );
+			// TODO
 		}
 
 		String path = attributes.path();
 		if ( path != null && !path.isEmpty() ) {
-			cookie.setPath( path );
+			header.append( "; Path=" + path );
 		}
 
 		String domain = attributes.domain();
 		if ( domain != null ) {
-			cookie.setDomain( domain );
+			header.append( "; Domain=" + domain );
 		}
 
 		Boolean secure = attributes.secure();
-		if ( secure != null ) {
-			cookie.setSecure( secure );
+		if ( Boolean.TRUE.equals( secure ) ) {
+			header.append( "; Secure" );
 		}
 
-		response.addCookie( cookie );
+		if ( response.isCommitted() ) {
+			return;
+		}
+
+		response.addHeader( "Set-Cookie", header.toString() );
 	}
 
 	@Override

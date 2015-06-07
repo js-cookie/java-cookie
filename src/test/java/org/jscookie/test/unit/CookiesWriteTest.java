@@ -1,15 +1,11 @@
 package org.jscookie.test.unit;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.Cookies;
 import org.jscookie.Expiration;
 import org.jscookie.test.unit.utils.BaseTest;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -25,17 +21,7 @@ public class CookiesWriteTest extends BaseTest {
 	@Test
 	public void simple_write() {
 		cookies.set( "c", "v" );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "/", actual.getPath() );
-		Assert.assertEquals( null, actual.getDomain() );
-		Assert.assertEquals( false, actual.getSecure() );
-		Assert.assertEquals( -1, actual.getMaxAge() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/" );
 	}
 
 	@Test
@@ -47,16 +33,8 @@ public class CookiesWriteTest extends BaseTest {
 			.expires( Expiration.days( 1 ) );
 		cookies.set( "c", "v" );
 
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "/", actual.getPath() );
-		Assert.assertEquals( "site.com", actual.getDomain() );
-		Assert.assertEquals( true, actual.getSecure() );
-		Assert.assertEquals( 86400, actual.getMaxAge() );
+		// TODO Add expires
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Domain=site.com; Secure" );
 	}
 
 	@Test
@@ -68,16 +46,8 @@ public class CookiesWriteTest extends BaseTest {
 			.expires( Expiration.days( 1 ) )
 		);
 
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "/", actual.getPath() );
-		Assert.assertEquals( "example.com", actual.getDomain() );
-		Assert.assertEquals( true, actual.getSecure() );
-		Assert.assertEquals( 86400, actual.getMaxAge() );
+		// TODO expires
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Domain=example.com; Secure" );
 	}
 
 	@Test
@@ -89,14 +59,8 @@ public class CookiesWriteTest extends BaseTest {
 			.path( "/" )
 		);
 
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "/", actual.getPath() );
-		Assert.assertEquals( "should consider default if not overriden", true, actual.getSecure() );
+		// Should consider default secure if not overriden
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; Secure" );
 	}
 
 	@Test
@@ -105,13 +69,7 @@ public class CookiesWriteTest extends BaseTest {
 			.path( null );
 		cookies.set( "c", "v" );
 
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "should fallback to whole site if removed", "/", actual.getPath() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/" );
 	}
 
 	@Test
@@ -120,12 +78,6 @@ public class CookiesWriteTest extends BaseTest {
 			.path( "" );
 		cookies.set( "c", "v" );
 
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "c", actual.getName() );
-		Assert.assertEquals( "v", actual.getValue() );
-		Assert.assertEquals( "should not send the path", null, actual.getPath() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v" );
 	}
 }

@@ -2,17 +2,13 @@ package org.jscookie.test.unit;
 
 import java.util.Arrays;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.CookieSerializationException;
 import org.jscookie.CookieValue;
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -28,67 +24,37 @@ public class CookiesJSONWriteTest extends BaseTest {
 	@Test
 	public void write_int_type() throws CookieSerializationException {
 		cookies.set( "c", 1 );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "1", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=1; Path=/" );
 	}
 
 	@Test
 	public void write_boolean_type() throws CookieSerializationException {
 		cookies.set( "c", true );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "true", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=true; Path=/" );
 	}
 
 	@Test
 	public void write_JSON_array_with_string() throws CookieSerializationException {
 		cookies.set( "c", Arrays.asList( "v" ) );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "[%22v%22]", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=[%22v%22]; Path=/" );
 	}
 
 	@Test
 	public void write_custom_type_with_string_prop() throws CookieSerializationException {
 		cookies.set( "c", new CustomTypeString( "v" ) );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "{%22property%22:%22v%22}", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c={%22property%22:%22v%22}; Path=/" );
 	}
 
 	@Test
 	public void write_custom_type_with_boolean_prop() throws CookieSerializationException {
 		cookies.set( "c", new CustomTypeBoolean( true ) );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "{%22property%22:true}", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c={%22property%22:true}; Path=/" );
 	}
 
 	@Test
 	public void write_custom_type_with_number_prop() throws CookieSerializationException {
 		cookies.set( "c", new CustomTypeInteger( 1 ) );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "{%22property%22:1}", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c={%22property%22:1}; Path=/" );
 	}
 
 	class CustomTypeString implements CookieValue {

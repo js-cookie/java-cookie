@@ -1,14 +1,10 @@
 package org.jscookie.test.unit;
 
-import javax.servlet.http.Cookie;
-
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -24,13 +20,7 @@ public class CookiesEncodingTest extends BaseTest {
 	@Test
 	public void character_not_allowed_in_name_and_value() {
 		cookies.set( ";,\\\" ", ";,\\\" " );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-		
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%3B%2C%5C%22%20", actual.getName() );
-		Assert.assertEquals( "%3B%2C%5C%22%20", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "%3B%2C%5C%22%20=%3B%2C%5C%22%20; Path=/" );
 	}
 
 	@Test
@@ -39,40 +29,21 @@ public class CookiesEncodingTest extends BaseTest {
 			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
 			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~"
 		);
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-		
-		Cookie actual = argument.getValue();
-		Assert.assertEquals(
-			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
-			actual.getValue()
-		);
-		Assert.assertEquals(
-			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~",
-			actual.getName()
+		Mockito.verify( response ).addHeader(
+			"Set-Cookie",
+			"!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~=!#$&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~; Path=/"
 		);
 	}
 
 	@Test
-	public void character_with_3_bytes() {
+	public void character_with_3_bytes_in_value() {
 		cookies.set( "c", "京" );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "%E4%BA%AC", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=%E4%BA%AC; Path=/" );
 	}
 
 	@Test
 	public void characters_allowed_in_cookie_value() {
 		cookies.set( "c", "/:<=>?@[]{}" );
-
-		ArgumentCaptor<Cookie> argument = ArgumentCaptor.forClass( Cookie.class );
-		Mockito.verify( response ).addCookie( argument.capture() );
-
-		Cookie actual = argument.getValue();
-		Assert.assertEquals( "/:<=>?@[]{}", actual.getValue() );
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=/:<=>?@[]{}; Path=/" );
 	}
 }
