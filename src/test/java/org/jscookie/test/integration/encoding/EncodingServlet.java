@@ -1,6 +1,9 @@
 package org.jscookie.test.integration.encoding;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +21,7 @@ public class EncodingServlet extends HttpServlet {
 	@Override
 	public void doGet( HttpServletRequest request, HttpServletResponse response )
 	throws ServletException, IOException {
-		String name = request.getParameter( "name" );
+		String name = getUTF8Param( "name", request );
 
 		System.out.println( "--------------------" );
 		System.out.println( "Testing: " + name );
@@ -38,6 +41,19 @@ public class EncodingServlet extends HttpServlet {
 		response.setContentType( "application/json" );
 		new ObjectMapper()
 			.writeValue( response.getOutputStream(), new Result( name, value ) );
+	}
+
+	/**
+	 * Retrieves the parameter using UTF-8 charset since the server default is ISO-8859-1
+	 */
+	private String getUTF8Param( String name, HttpServletRequest request ) throws UnsupportedEncodingException {
+		String query = request.getQueryString();
+		for ( String pair : query.split( "&" ) ) {
+			if ( name.equals( pair.split( "=" )[ 0 ] ) ) {
+				return URLDecoder.decode( pair.split( "=" )[ 1 ], StandardCharsets.UTF_8.name() );
+			}
+		}
+		return null;
 	}
 }
 
