@@ -23,14 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.PageFactory;
-
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 @RunWith( Arquillian.class )
 public class CookiesEncodingIT {
-	private static Debug debug = Debug.TRUE;
+	private static Debug debug = Debug.FALSE;
 
 	@Deployment
 	public static Archive<?> createDeployment() {
@@ -66,7 +63,7 @@ public class CookiesEncodingIT {
 	@RunAsClient
 	@Test
 	public void read_qunit_test( @ArquillianResource URL baseURL ) {
-		WebDriver driver = createDriver();
+		WebDriver driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait( 20, TimeUnit.SECONDS );
 
 		EncodingPageObject encoding = PageFactory.initElements( driver, EncodingPageObject.class );
@@ -78,21 +75,6 @@ public class CookiesEncodingIT {
 		int actualPasses = results.getPassed();
 		Assert.assertEquals( "should pass all tests", expectedPasses, actualPasses );
 
-		dispose( driver );
-	}
-
-	private WebDriver createDriver() {
-		if ( debug.is( true ) ) {
-			return new FirefoxDriver();
-		}
-
-		HtmlUnitDriver driver = new HtmlUnitDriver( BrowserVersion.CHROME );
-		driver.setJavascriptEnabled( true );
-
-		return driver;
-	}
-
-	private void dispose( WebDriver driver ) {
 		if ( debug.is( false ) ) {
 			driver.quit();
 		}

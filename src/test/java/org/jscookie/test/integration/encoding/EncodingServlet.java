@@ -23,7 +23,6 @@ public class EncodingServlet extends HttpServlet {
 	throws ServletException, IOException {
 		String name = getUTF8Param( "name", request );
 
-		System.out.println( "--------------------" );
 		System.out.println( "Testing: " + name );
 
 		Cookies cookies = Cookies.initFromServlet( request, response );
@@ -32,9 +31,6 @@ public class EncodingServlet extends HttpServlet {
 		if ( value == null ) {
 			throw new NullPointerException( "Cookie not found with name: " + name );
 		}
-
-		System.out.println( "Value: " + value );
-		System.out.println( "--------------------" );
 
 		cookies.set( name, value );
 

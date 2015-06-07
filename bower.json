@@ -1,6 +1,6 @@
 {
   "name": "java-cookie",
   "devDependencies": {
-    "js-cookie": "integration-api"
+    "js-cookie": "master"
   }
 }
