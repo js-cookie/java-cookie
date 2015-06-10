@@ -64,3 +64,47 @@ cookies.remove( "name", Attributes.empty().path( "path" ) ); // removed!
 ```
 
 *IMPORTANT! when deleting a cookie, you must pass the exact same path, domain and secure attributes that were used to set the cookie, unless you're relying on the [default attributes](#cookie-attributes).*
+
+## JSON and Data Binding
+
+java-cookie provides unobstrusive JSON storage for cookies and data binding.
+
+When creating a cookie, you can pass an Object instead of String in the value. If you do so, java-cookie will store the stringified JSON representation of the value using [jackson databind](https://github.com/FasterXML/jackson-databind/#use-it).
+
+Consider the following class:
+
+```java
+public class Person {
+  private int age;
+  public Person( int age ) {
+    this.age = age;
+  }
+  public int getAge() {
+    return age;
+  }
+}
+```
+
+And the following usage:
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+cookies.set( "name", new Person( 25 ) );
+```
+
+When reading a cookie with the default `get()` api, you receive the string representation stored in the cookie:
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+String value = cookies.get( "name" ); // => "{\"age\":25}"
+```
+
+If you pass the type reference, it will parse the JSON into a new instance:
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+Person adult = cookies.get( "name", Person.class );
+if ( adult != null ) {
+  adult.getAge(); // => 25
+}
+```
