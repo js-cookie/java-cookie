@@ -114,3 +114,17 @@ if ( adult != null ) {
 This project is [RFC 6265](http://tools.ietf.org/html/rfc6265#section-4.1.1) compliant. All special characters that are not allowed in the cookie-name or cookie-value are encoded with each one's UTF-8 Hex equivalent using [percent-encoding](http://en.wikipedia.org/wiki/Percent-encoding).  
 The only character in cookie-name or cookie-value that is allowed and still encoded is the percent `%` character, it is escaped in order to interpret percent input as literal.  
 To override the default cookie decoding you need to use a [converter](#converter).
+
+## Cookie Attributes
+
+the default cookie attributes can be set globally by setting properties of the `.defaults()` instance or individually for each call to `.set(...)` by passing an `Attributes` instance in the last argument. Per-call attributes override the default attributes.
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+cookies.defaults()
+  .secure( true )
+  .httpOnly( true );
+cookies.set( "name", "value", Attributes.empty()
+  .httpOnly( false ) // override defaults
+);
+```
