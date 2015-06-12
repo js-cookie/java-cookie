@@ -208,3 +208,36 @@ cookies.set( "name", "value", httpOnlyCookie );
 cookies.get( "name" ); // => "value"
 cookies.remove( "name", httpOnlyCookie );
 ```
+
+## Converter
+
+Create a new instance of the api that overrides the default decoding implementation.  
+All methods that rely in a proper decoding to work, such as `remove()` and `get()`, will run the converter first for each cookie.  
+The returning String will be used as the cookie value.
+
+Example from reading one of the cookies that can only be decoded using the Javascript `escape` function:
+
+``` java
+// document.cookie = 'escaped=%u5317';
+// document.cookie = 'default=%E5%8C%97';
+
+Cookies cookies = Cookies.initFromServlet( request, response );
+Cookies escapedCookies = cookies.withConverter(new Cookies.Converter() {
+  @Override
+  public String convert( String value, String name ) throws ConverterException {
+    ScriptEngine javascript = new ScriptEngineManager().getEngineByName( "JavaScript" );
+    if ( name.equals( "escaped" ) ) {
+      try {
+        return javascript.eval( "unescape('" + value + "')" ).toString();
+      } catch ( ScriptException e ) {
+        throw new ConverterException( e );
+      }
+    }
+    return null;
+  }
+});
+
+escapedCookies.get( "escaped" ); // => 北
+escapedCookies.get( "default" ); // => 北
+escapedCookies.get(); // => {escaped=北, default=北}
+```
