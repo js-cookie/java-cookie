@@ -192,3 +192,19 @@ cookies.set( "name", "value", secureCookie );
 cookies.get( "name" ); // => "value"
 cookies.remove( "name", secureCookie );
 ```
+
+### httpOnly
+
+A `Boolean` indicating if the cookie should be restricted to be manipulated only in the server.
+
+**Default:** The cookie can be manipulated in the server and in the client
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+Attributes httpOnlyCookie = Attributes.empty().httpOnly( true );
+cookies.set( "name", "value", httpOnlyCookie );
+cookies.get( "name" ); // => "value"
+cookies.remove( "name", httpOnlyCookie );
+```
