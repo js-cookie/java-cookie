@@ -241,3 +241,19 @@ escapedCookies.get( "escaped" ); // => 北
 escapedCookies.get( "default" ); // => 北
 escapedCookies.get(); // => {escaped=北, default=北}
 ```
+
+Instead of passing a converter inline, you can also create a custom strategy by implementing the `ConverterStrategy` interface:
+
+```java
+class CustomConverter implements ConverterStrategy {
+  @Override
+  public String convert( String value, String name ) throws ConverterException {
+    return value;
+  }
+}
+```
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+Cookies cookiesWithCustomConverter = cookies.withConverter( new CustomConverter() );
+```
