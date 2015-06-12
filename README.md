@@ -128,3 +128,20 @@ cookies.set( "name", "value", Attributes.empty()
   .httpOnly( false ) // override defaults
 );
 ```
+
+### expires
+
+Define when the cookie will be removed. Value can be an `Expiration.days()` which will be interpreted as days from time of creation, a `java.util.Date` or an `org.joda.time.DateTime` instance. If omitted, the cookie becomes a session cookie.
+
+**Default:** Cookie is removed when the user closes the browser.
+
+**Examples:**
+
+```java
+DateTime date_2015_06_07_23h38m46s = new DateTime( 2015, 6, 7, 23, 38, 46 );
+cookies.set( "name", "value", Attributes.empty()
+  .expires( Expiration.date( date_2015_06_07_23h38m46s ) )
+);
+cookies.get( "name" ); // => "value"
+cookies.remove( "name" );
+```
