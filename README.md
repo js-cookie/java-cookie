@@ -176,3 +176,19 @@ Cookies cookies = Cookies.initFromServlet( request, response );
 cookies.set( "name", "value", Attributes.empty().domain( "sub.domain.com" ) );
 cookies.get( "name" ); // => null (need to read at "sub.domain.com")
 ```
+
+### secure
+
+A `Boolean` indicating if the cookie transmission requires a secure protocol (https)
+
+**Default:** No secure protocol requirement
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+Attributes secureCookie = Attributes.empty().secure( true );
+cookies.set( "name", "value", secureCookie );
+cookies.get( "name" ); // => "value"
+cookies.remove( "name", secureCookie );
+```
