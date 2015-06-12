@@ -139,9 +139,26 @@ Define when the cookie will be removed. Value can be an `Expiration.days()` whic
 
 ```java
 DateTime date_2015_06_07_23h38m46s = new DateTime( 2015, 6, 7, 23, 38, 46 );
+Cookies cookies = Cookies.initFromServlet( request, response );
 cookies.set( "name", "value", Attributes.empty()
   .expires( Expiration.date( date_2015_06_07_23h38m46s ) )
 );
 cookies.get( "name" ); // => "value"
 cookies.remove( "name" );
+```
+
+### path
+
+Define the path where the cookie is available.
+
+**Default:** `/`
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+Attributes validToTheCurrentPage = Attributes.empty().path( "" );
+cookies.set( "name", "value", validToTheCurrentPath );
+cookies.get( "name" ); // => "value"
+cookies.remove( "name", validToTheCurrentPath );
 ```
