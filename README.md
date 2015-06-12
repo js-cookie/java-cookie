@@ -162,3 +162,17 @@ cookies.set( "name", "value", validToTheCurrentPath );
 cookies.get( "name" ); // => "value"
 cookies.remove( "name", validToTheCurrentPath );
 ```
+
+### domain
+
+Define the domain where the cookie is available
+
+**Default:** Domain of the page where the cookie was created
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+cookies.set( "name", "value", Attributes.empty().domain( "sub.domain.com" ) );
+cookies.get( "name" ); // => null (need to read at "sub.domain.com")
+```
