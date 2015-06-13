@@ -32,12 +32,12 @@ After the build completes, you should see the following message in the console:
     BUILD SUCCESS
     ----------------------------------------------------------------------------
 
-### Tests
-When executing the build, maven runs all unit and integration tests.  
-
-To run the unit tests separately, execute the following command:
+### Unit tests
+To run the unit tests, execute the following command:
 
     $ mvn test
+
+### Integration tests
 
 If you want to debug the integration tests in the browser, switch `Debug.FALSE` to `Debug.TRUE` in `CookiesEncodingIT.java` and run the build:
 
