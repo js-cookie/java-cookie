@@ -31,3 +31,16 @@ After the build completes, you should see the following message in the console:
     ----------------------------------------------------------------------------
     BUILD SUCCESS
     ----------------------------------------------------------------------------
+
+### Tests
+When executing the build, maven runs all unit and integration tests.  
+
+To run the unit tests separately, execute the following command:
+
+    $ mvn test
+
+If you want to debug the integration tests in the browser, switch `Debug.FALSE` to `Debug.TRUE` in `CookiesEncodingIT.java` and run the build:
+
+    $ mvn install
+
+[Arquillian](http://arquillian.org/) will start the server, [Selenium](http://www.seleniumhq.org/) will run the tests in Firefox, but the build will hang to allow debugging in the browser.
