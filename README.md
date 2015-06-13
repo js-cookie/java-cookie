@@ -2,6 +2,10 @@
 
 A simple Java API for handling cookies
 
+* [Unobstrusive](#json-data-binding) JSON Data Binding support
+* [RFC 6265](http://www.rfc-editor.org/rfc/rfc6265.txt) compliant
+* Enable [custom decoding](#converter)
+
 ## Basic Usage
 
 Create a cookie, valid across the entire site
@@ -65,9 +69,9 @@ cookies.remove( "name", Attributes.empty().path( "path" ) ); // removed!
 
 *IMPORTANT! when deleting a cookie, you must pass the exact same path, domain and secure attributes that were used to set the cookie, unless you're relying on the [default attributes](#cookie-attributes).*
 
-## JSON and Data Binding
+## JSON Data Binding
 
-java-cookie provides unobstrusive JSON storage for cookies and data binding.
+java-cookie provides unobstrusive JSON storage for cookies with data binding.
 
 When creating a cookie, you can pass a few supported types instead of String in the value. If you do so, java-cookie will store the stringified JSON representation of the value using [jackson databind](https://github.com/FasterXML/jackson-databind/#use-it).
 
