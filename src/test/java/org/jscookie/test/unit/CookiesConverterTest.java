@@ -5,6 +5,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jscookie.ConverterException;
+import org.jscookie.ConverterStrategy;
 import org.jscookie.Cookies;
 import org.jscookie.test.unit.utils.BaseTest;
 import org.junit.Assert;
@@ -50,5 +51,17 @@ public class CookiesConverterTest extends BaseTest {
 		actual = cookies.get( "encoded" );
 		expected = "京";
 		Assert.assertEquals( expected, actual );
+	}
+
+	@Test
+	public void should_be_able_to_create_a_custom_strategy() {
+		this.cookies.withConverter( new CustomConverter() );
+	}
+
+	private class CustomConverter implements ConverterStrategy {
+		@Override
+		public String convert( String value, String name ) throws ConverterException {
+			return value;
+		}
 	}
 }
