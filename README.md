@@ -257,3 +257,7 @@ class CustomConverter implements ConverterStrategy {
 Cookies cookies = Cookies.initFromServlet( request, response );
 Cookies cookiesWithCustomConverter = cookies.withConverter( new CustomConverter() );
 ```
+
+## Contributing
+
+Check out the [Contributing Guidelines](CONTRIBUTING.md).
