@@ -26,7 +26,7 @@ Browse to the project root directory and run the build:
 
     $ mvn install
 
-After the build completes you should be the following message in the console:
+After the build completes, you should see the following message in the console:
 
     ----------------------------------------------------------------------------
     BUILD SUCCESS
