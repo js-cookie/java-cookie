@@ -69,12 +69,12 @@ cookies.remove( "name", Attributes.empty().path( "path" ) ); // removed!
 
 java-cookie provides unobstrusive JSON storage for cookies and data binding.
 
-When creating a cookie, you can pass an Object instead of String in the value. If you do so, java-cookie will store the stringified JSON representation of the value using [jackson databind](https://github.com/FasterXML/jackson-databind/#use-it).
+When creating a cookie, you can pass a few supported types instead of String in the value. If you do so, java-cookie will store the stringified JSON representation of the value using [jackson databind](https://github.com/FasterXML/jackson-databind/#use-it).
 
-Consider the following class:
+Consider the following class that implements the `CookieValue` interface:
 
 ```java
-public class Person {
+public class Person implements CookieValue {
   private int age;
   public Person( int age ) {
     this.age = age;
