@@ -44,3 +44,5 @@ If you want to debug the integration tests in the browser, switch `Debug.FALSE` 
     $ mvn install
 
 [Arquillian](http://arquillian.org/) will start the server, [Selenium](http://www.seleniumhq.org/) will run the tests in Firefox, but the build will hang to allow debugging in the browser.
+
+It uses the [integration hook](https://github.com/js-cookie/js-cookie/blob/master/CONTRIBUTING.md#integration-with-server-side) provided by the project [js-cookie](https://github.com/js-cookie/js-cookie).
