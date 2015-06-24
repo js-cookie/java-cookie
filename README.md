@@ -1,4 +1,4 @@
-# Java Cookie
+# Java Cookie [![Build Status](https://travis-ci.org/js-cookie/java-cookie.svg?branch=master)](https://travis-ci.org/js-cookie/java-cookie)
 
 A simple Java API for handling cookies
 
