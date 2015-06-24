@@ -3,7 +3,6 @@ package org.jscookie;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +20,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class Cookies implements CookiesDefinition {
+	private static String UTF_8 = "UTF-8";
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	private AttributesDefinition defaults = Attributes.empty();
@@ -298,7 +298,7 @@ public final class Cookies implements CookiesDefinition {
 			try {
 				String character = new String( Character.toChars( codePoint ) );
 				CharArrayWriter hexSequence = new CharArrayWriter();
-				byte[] bytes = character.getBytes( StandardCharsets.UTF_8.name() );
+				byte[] bytes = character.getBytes( UTF_8 );
 				for ( int bytesIndex = 0; bytesIndex < bytes.length; bytesIndex++ ) {
 					char left = Character.forDigit( bytes[ bytesIndex ] >> 4 & 0xF, 16 );
 					char right = Character.forDigit( bytes[ bytesIndex ] & 0xF, 16 );
@@ -330,7 +330,7 @@ public final class Cookies implements CookiesDefinition {
 				bytes[ i - 1 ] = ( byte )Integer.parseInt( encodedByte, 16 );
 			}
 			try {
-				String decodedChar = new String( bytes, StandardCharsets.UTF_8.toString() );
+				String decodedChar = new String( bytes, UTF_8 );
 				decoded = decoded.replace( encodedChar, decodedChar );
 			} catch ( UnsupportedEncodingException e ) {
 				e.printStackTrace();
@@ -340,7 +340,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private String encodeValue( String decodedValue ) {
-		Set<Integer> exceptions = new HashSet<>();
+		Set<Integer> exceptions = new HashSet<Integer>();
 		for ( int i = 0; i < decodedValue.length(); ) {
 			int codePoint = decodedValue.codePointAt( i );
 			i += Character.charCount( codePoint );
@@ -393,7 +393,7 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private Map<String, String> getCookies( String cookieHeader ) {
-		Map<String, String> result = new HashMap<>();
+		Map<String, String> result = new HashMap<String, String>();
 		String[] cookies = cookieHeader.split( "; " );
 		for ( int i = 0; i < cookies.length; i++ ) {
 			String cookie = cookies[ i ];

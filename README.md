@@ -2,6 +2,7 @@
 
 A simple Java API for handling cookies
 
+* Supports Java 6+
 * [Unobtrusive](#json-data-binding) JSON Data Binding support
 * [RFC 6265](http://www.rfc-editor.org/rfc/rfc6265.txt) compliant
 * Enable [custom decoding](#converter)

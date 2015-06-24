@@ -3,7 +3,6 @@ package org.jscookie.test.integration.encoding;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +45,7 @@ public class EncodingServlet extends HttpServlet {
 		String query = request.getQueryString();
 		for ( String pair : query.split( "&" ) ) {
 			if ( name.equals( pair.split( "=" )[ 0 ] ) ) {
-				return URLDecoder.decode( pair.split( "=" )[ 1 ], StandardCharsets.UTF_8.name() );
+				return URLDecoder.decode( pair.split( "=" )[ 1 ], "UTF-8" );
 			}
 		}
 		return null;
