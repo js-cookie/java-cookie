@@ -1,5 +1,6 @@
 package org.jscookie.test.integration.encoding;
 
+import java.io.File;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,11 @@ public class CookiesEncodingIT {
 			.as( GenericArchive.class );
 
 		WebArchive war = IntegrationUtils.createCommonDeployment()
-			.merge( qunitFiles, "/", Filters.includeAll() );
+			.merge( qunitFiles, "/", Filters.includeAll() )
+			.addAsWebInfResource(
+				new File( "src/test/resources/web.xml" ),
+				"web.xml"
+			);
 
 		System.out.println( " ----- LOGGING THE FILES ADDED TO JBOSS" );
 		System.out.println( war.toString( true ) );

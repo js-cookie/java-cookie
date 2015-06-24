@@ -248,9 +248,6 @@ public final class Cookies implements CookiesDefinition {
 	}
 
 	private void setCookie( String cookieValue, HttpServletResponse response ) {
-		if ( response.getHeaders( "Set-Cookie" ).contains( cookieValue ) ) {
-			return;
-		}
 		response.addHeader( "Set-Cookie", cookieValue );
 	}
 
