@@ -9,6 +9,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <selenium.version>2.45.0</selenium.version>
+    <project.scm.id>java-cookie-scm</project.scm.id>
   </properties>
   <licenses>
     <license>
