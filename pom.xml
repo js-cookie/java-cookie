@@ -20,7 +20,7 @@
   </licenses>
   <scm>
     <url>https://github.com/js-cookie/java-cookie</url>
-    <connection>https://github.com/js-cookie/java-cookie.git</connection>
+    <connection>scm:git:git@github.com:js-cookie/java-cookie.git</connection>
     <developerConnection>scm:git:git@github.com:js-cookie/java-cookie.git</developerConnection>
   </scm>
   <repositories>
