@@ -2,3 +2,5 @@
 /node
 /node_modules
 /bower_components
+/release.properties
+/pom.xml.releaseBackup
