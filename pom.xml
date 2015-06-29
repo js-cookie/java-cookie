@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jscookie</groupId>
   <artifactId>java-cookie</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <name>Java Cookie</name>
   <description>A simple Servlet API for handling cookies</description>
   <properties>
@@ -22,6 +22,7 @@
     <url>https://github.com/js-cookie/java-cookie</url>
     <connection>scm:git:https://github.com/js-cookie/java-cookie.git</connection>
     <developerConnection>scm:git:https://github.com/js-cookie/java-cookie.git</developerConnection>
+    <tag>v0.0.1</tag>
   </scm>
   <repositories>
     <repository>
