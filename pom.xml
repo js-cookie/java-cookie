@@ -5,6 +5,7 @@
   <version>0.0.2-SNAPSHOT</version>
   <name>Java Cookie</name>
   <description>A simple Servlet API for handling cookies</description>
+  <url>https://github.com/js-cookie/java-cookie</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -18,6 +19,14 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <name>Fagner Brack</name>
+      <email>github@fagnermartins.com</email>
+      <organization>js-cookie</organization>
+      <organizationUrl>https://github.com/js-cookie</organizationUrl>
+    </developer>
+  </developers>
   <scm>
     <url>https://github.com/js-cookie/java-cookie</url>
     <connection>scm:git:https://github.com/js-cookie/java-cookie.git</connection>
