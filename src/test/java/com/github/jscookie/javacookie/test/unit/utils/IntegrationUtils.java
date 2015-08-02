@@ -10,8 +10,8 @@ public class IntegrationUtils {
 	public static WebArchive createCommonDeployment() {
 		boolean RECURSIVE_TRUE = true;
 		return ShrinkWrap.create( WebArchive.class )
-			.addPackage( "org.jscookie" )
-			.addPackages( RECURSIVE_TRUE, "org.jscookie.test.integration" )
+			.addPackage( "com.github.jscookie.javacookie" )
+			.addPackages( RECURSIVE_TRUE, "com.github.jscookie.javacookie.test.integration" )
 			.addAsLibraries(
 				Maven.resolver()
 					.loadPomFromFile( "pom.xml" )
