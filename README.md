@@ -24,7 +24,7 @@ If you don`t use Maven you can build the artifact from this repository, by insta
 ```shell
 $ git clone https://github.com/js-cookie/java-cookie.git
 $ cd java-cookie
-$ mvn install
+$ mvn install -P simple
 ```
 
 The artifact will be created inside the `java-cookie/target` folder.
