@@ -7,6 +7,28 @@ A simple Java API for handling cookies
 * [RFC 6265](http://www.rfc-editor.org/rfc/rfc6265.txt) compliant
 * Enable [custom decoding](#converter)
 
+## Installation
+
+Include the maven dependency in your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>com.github.js-cookie</groupId>
+  <artifactId>java-cookie</artifactId>
+  <version>0.0.2</version>
+</dependency>
+```
+
+If you don`t use Maven you can build the artifact from this repository, by installing [git SCM](https://git-scm.com/downloads), [Maven](https://maven.apache.org/download.cgi) and executing the commands below:
+
+```shell
+$ git clone https://github.com/js-cookie/java-cookie.git
+$ cd java-cookie
+$ mvn install
+```
+
+The artifact will be created inside the `java-cookie/target` folder.
+
 ## Basic Usage
 
 Create a cookie, valid across the entire site
