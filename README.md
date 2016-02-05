@@ -94,7 +94,7 @@ cookies.remove( "name", Attributes.empty().path( "path" ) ); // removed!
 
 ## JSON Data Binding
 
-java-cookie provides unobstrusive JSON storage for cookies with data binding.
+java-cookie provides unobtrusive JSON storage for cookies with data binding.
 
 When creating a cookie, you can pass a few supported types instead of String in the value. If you do so, java-cookie will store the stringified JSON representation of the value using [jackson databind](https://github.com/FasterXML/jackson-databind/#use-it).
 
