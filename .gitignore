@@ -6,3 +6,6 @@
 /pom.xml.releaseBackup
 *.iml
 .idea
+.project
+.classpath
+.settings
