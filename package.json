@@ -1,14 +1,12 @@
 {
   "name": "java-cookie",
   "version": "1.0.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/js-cookie/java-cookie.git"
   },
   "devDependencies": {
-    "bower": "1.4.1",
-    "grunt": "0.4.5",
-    "grunt-bower-postinst": "0.2.1",
-    "grunt-cli": "0.1.13"
+    "bower": "1.8.8"
   }
 }

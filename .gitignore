@@ -4,3 +4,5 @@
 /bower_components
 /release.properties
 /pom.xml.releaseBackup
+*.iml
+.idea
