@@ -9,12 +9,13 @@
     <servlet-name>encoding</servlet-name>
     <url-pattern>/encoding</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>multiple-set-cookie</servlet-name>
-    <servlet-class>com.github.jscookie.javacookie.test.integration.write.MultipleSetCookieServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>multiple-set-cookie</servlet-name>
-    <url-pattern>/multiple-set-cookie</url-pattern>
-  </servlet-mapping>
+  <!-- Test is missing -->
+<!--  <servlet>-->
+<!--    <servlet-name>multiple-set-cookie</servlet-name>-->
+<!--    <servlet-class>com.github.jscookie.javacookie.test.integration.write.MultipleSetCookieServlet</servlet-class>-->
+<!--  </servlet>-->
+<!--  <servlet-mapping>-->
+<!--    <servlet-name>multiple-set-cookie</servlet-name>-->
+<!--    <url-pattern>/multiple-set-cookie</url-pattern>-->
+<!--  </servlet-mapping>-->
 </web-app>
