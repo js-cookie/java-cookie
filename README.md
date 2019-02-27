@@ -2,7 +2,7 @@
 
 A simple Java API for handling cookies
 
-* Supports Java 6+, Servlet 2.2+
+* Supports Java 8+, Servlet 2.2+
 * [Unobtrusive](#json-data-binding) JSON Data Binding support
 * [RFC 6265](http://www.rfc-editor.org/rfc/rfc6265.txt) compliant
 * Enable [custom decoding](#converter)
