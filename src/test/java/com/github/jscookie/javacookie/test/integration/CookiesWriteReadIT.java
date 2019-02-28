@@ -76,7 +76,7 @@ public class CookiesWriteReadIT {
 
     // Read cookie
     driver.navigate().to(baseURL + "read_json?name=c");
-    Assert.assertEquals("{\"name\":\"c\",\"value\":\"v\"}", driver.findElement(By.id("json")).getText());
+    Assert.assertEquals("{\"attr1\":\"v\",\"attr2\":\"v\"}", driver.findElement(By.id("json")).getText());
 
     if (debug.is(false)) {
       driver.quit();
