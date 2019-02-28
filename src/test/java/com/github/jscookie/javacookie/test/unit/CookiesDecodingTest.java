@@ -34,4 +34,12 @@ public class CookiesDecodingTest extends BaseTest {
 		String expected = "京";
 		Assert.assertEquals( expected, actual );
 	}
+
+	@Test
+	public void two_encoded_characters() {
+		Mockito.when(request.getHeader("cookie")).thenReturn("c=New%20York%2C%20NY");
+		String actual = cookies.get("c");
+		String expected = "New York, NY";
+		Assert.assertEquals(expected, actual);
+	}
 }
