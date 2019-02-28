@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
   <servlet>
     <servlet-name>encoding</servlet-name>
@@ -8,13 +9,5 @@
   <servlet-mapping>
     <servlet-name>encoding</servlet-name>
     <url-pattern>/encoding</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <servlet-name>multiple-set-cookie</servlet-name>
-    <servlet-class>com.github.jscookie.javacookie.test.integration.write.MultipleSetCookieServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>multiple-set-cookie</servlet-name>
-    <url-pattern>/multiple-set-cookie</url-pattern>
   </servlet-mapping>
 </web-app>
