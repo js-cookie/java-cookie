@@ -102,6 +102,17 @@ public class CookiesJSONReadTest extends BaseTest {
 		Assert.assertEquals( expected2, actual2 );
 	}
 
+	@Test
+	public void read_missing_cookie() throws CookieParseException {
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( null );
+
+		Assert.assertNull( cookies.get( "c" ) );
+		Assert.assertNull( cookies.get( "c", CustomTypeInteger.class ) );
+		Assert.assertNull( cookies.get( "c", CustomTypeBoolean.class ) );
+		Assert.assertNull( cookies.get( "c", CustomTypeString.class ) );
+		Assert.assertNull( cookies.get( "c", new TypeReference<List<String>>() {} ) );
+	}
+
 	private static class CustomTypeString {
 		private String property;
 		@JsonProperty( "property" )
