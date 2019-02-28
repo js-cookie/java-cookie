@@ -6,8 +6,40 @@
     <servlet-name>encoding</servlet-name>
     <servlet-class>com.github.jscookie.javacookie.test.integration.encoding.EncodingServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>write</servlet-name>
+    <servlet-class>com.github.jscookie.javacookie.test.integration.WriteCookieServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>read</servlet-name>
+    <servlet-class>com.github.jscookie.javacookie.test.integration.ReadCookieServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>write_json</servlet-name>
+    <servlet-class>com.github.jscookie.javacookie.test.integration.WriteJSONCookieServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>read_json</servlet-name>
+    <servlet-class>com.github.jscookie.javacookie.test.integration.ReadJSONCookieServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>encoding</servlet-name>
     <url-pattern>/encoding</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>write</servlet-name>
+    <url-pattern>/write</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>read</servlet-name>
+    <url-pattern>/read</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>write_json</servlet-name>
+    <url-pattern>/write_json</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>read_json</servlet-name>
+    <url-pattern>/read_json</url-pattern>
   </servlet-mapping>
 </web-app>
