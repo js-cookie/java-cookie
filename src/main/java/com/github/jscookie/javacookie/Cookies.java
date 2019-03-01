@@ -65,6 +65,9 @@ public final class Cookies implements CookiesDefinition {
 	@Override
 	public <T> T get( String name, Class<T> dataType ) throws CookieParseException {
 		String value = get( name );
+		if ( value == null ) {
+			return null;
+		}
 		try {
 			return mapper.readValue( value, dataType );
 		} catch ( IOException e ) {
@@ -75,6 +78,9 @@ public final class Cookies implements CookiesDefinition {
 	@Override
 	public <T> T get( String name, TypeReference<T> typeRef ) throws CookieParseException {
 		String value = get( name );
+		if ( value == null ) {
+			return null;
+		}
 		try {
 			return mapper.readValue( value, typeRef );
 		} catch ( IOException e ) {
