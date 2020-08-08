@@ -506,7 +506,7 @@ public final class Cookies implements CookiesDefinition {
 				httpOnly = reference.httpOnly();
 			}
 			if ( reference.sameSite() != null ) {
-				domain = reference.sameSite();
+				sameSite = reference.sameSite();
 			}
 			return this;
 		}

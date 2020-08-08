@@ -236,6 +236,20 @@ cookies.get( "name" ); // => "value"
 cookies.remove( "name", httpOnlyCookie );
 ```
 
+### sameSize
+
+Define whether your cookie should be restricted to a first party or same-site context
+
+**Default:** Lax
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+cookies.set( "name", "value", Attributes.empty().sameSite( "Lax" ) );
+cookies.get( "name" ); // => "value"
+```
+
 ## Converter
 
 Create a new instance of the api that overrides the default decoding implementation.  
