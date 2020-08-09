@@ -2,8 +2,14 @@ language: java
 
 jdk:
 #  - oraclejdk8
-  - oraclejdk9
+#  - oraclejdk9
   - oraclejdk11
+  - oraclejdk12
+  - oraclejdk13
+  - oraclejdk14
   - openjdk8
   - openjdk10
   - openjdk11
+  - openjdk12
+  - openjdk13
+  - openjdk14
