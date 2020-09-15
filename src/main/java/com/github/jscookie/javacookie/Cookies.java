@@ -147,6 +147,11 @@ public final class Cookies implements CookiesDefinition {
 			header.append( "; HttpOnly" );
 		}
 
+		String sameSite = attributes.sameSite();
+		if ( sameSite != null ) {
+			header.append( "; SameSite=" + sameSite );
+		}
+
 		if ( response.isCommitted() ) {
 			return;
 		}
@@ -416,6 +421,7 @@ public final class Cookies implements CookiesDefinition {
 		private String domain;
 		private Boolean secure;
 		private Boolean httpOnly;
+		private String sameSite;
 
 		private Attributes() {}
 
@@ -473,6 +479,16 @@ public final class Cookies implements CookiesDefinition {
 			return this;
 		}
 
+		@Override
+		String sameSite() {
+			return sameSite;
+		}
+		@Override
+		public Attributes sameSite( String sameSite ) {
+			this.sameSite = sameSite;
+			return this;
+		}
+
 		private Attributes merge( AttributesDefinition reference ) {
 			if ( reference.path() != null ) {
 				path = reference.path();
@@ -488,6 +504,9 @@ public final class Cookies implements CookiesDefinition {
 			}
 			if ( reference.httpOnly() != null ) {
 				httpOnly = reference.httpOnly();
+			}
+			if ( reference.sameSite() != null ) {
+				sameSite = reference.sameSite();
 			}
 			return this;
 		}

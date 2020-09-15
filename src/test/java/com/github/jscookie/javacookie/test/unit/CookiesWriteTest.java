@@ -96,4 +96,12 @@ public class CookiesWriteTest extends BaseTest {
 		);
 		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; HttpOnly" );
 	}
+
+	@Test
+	public void sameSite_attribute() {
+		cookies.set( "c", "v", Attributes.empty()
+			.sameSite( "Lax" )
+		);
+		Mockito.verify( response ).addHeader( "Set-Cookie", "c=v; Path=/; SameSite=Lax" );
+	}
 }
