@@ -7,3 +7,6 @@
 *.iml
 .idea
 .vscode
+.settings
+.classpath
+.project
