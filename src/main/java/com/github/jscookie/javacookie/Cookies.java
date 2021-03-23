@@ -65,6 +65,9 @@ public final class Cookies implements CookiesDefinition {
 	@Override
 	public <T> T get( String name, Class<T> dataType ) throws CookieParseException {
 		String value = get( name );
+		if ( value == null ) {
+			return null;
+		}
 		try {
 			return mapper.readValue( value, dataType );
 		} catch ( IOException e ) {
@@ -75,6 +78,9 @@ public final class Cookies implements CookiesDefinition {
 	@Override
 	public <T> T get( String name, TypeReference<T> typeRef ) throws CookieParseException {
 		String value = get( name );
+		if ( value == null ) {
+			return null;
+		}
 		try {
 			return mapper.readValue( value, typeRef );
 		} catch ( IOException e ) {
@@ -139,6 +145,11 @@ public final class Cookies implements CookiesDefinition {
 		Boolean httpOnly = attributes.httpOnly();
 		if ( Boolean.TRUE.equals( httpOnly ) ) {
 			header.append( "; HttpOnly" );
+		}
+
+		String sameSite = attributes.sameSite();
+		if ( sameSite != null ) {
+			header.append( "; SameSite=" + sameSite );
 		}
 
 		if ( response.isCommitted() ) {
@@ -413,6 +424,7 @@ public final class Cookies implements CookiesDefinition {
 		private String domain;
 		private Boolean secure;
 		private Boolean httpOnly;
+		private String sameSite;
 
 		private Attributes() {}
 
@@ -470,6 +482,16 @@ public final class Cookies implements CookiesDefinition {
 			return this;
 		}
 
+		@Override
+		String sameSite() {
+			return sameSite;
+		}
+		@Override
+		public Attributes sameSite( String sameSite ) {
+			this.sameSite = sameSite;
+			return this;
+		}
+
 		private Attributes merge( AttributesDefinition reference ) {
 			if ( reference.path() != null ) {
 				path = reference.path();
@@ -485,6 +507,9 @@ public final class Cookies implements CookiesDefinition {
 			}
 			if ( reference.httpOnly() != null ) {
 				httpOnly = reference.httpOnly();
+			}
+			if ( reference.sameSite() != null ) {
+				sameSite = reference.sameSite();
 			}
 			return this;
 		}

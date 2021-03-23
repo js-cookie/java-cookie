@@ -19,7 +19,7 @@ Include the maven dependency in your `pom.xml`:
 </dependency>
 ```
 
-If you don`t use Maven you can build the artifact from this repository, by installing [git SCM](https://git-scm.com/downloads), [Maven](https://maven.apache.org/download.cgi) and executing the commands below:
+If you don't use Maven you can build the artifact from this repository, by installing [git SCM](https://git-scm.com/downloads), [Maven](https://maven.apache.org/download.cgi) and executing the commands below:
 
 ```shell
 $ git clone https://github.com/js-cookie/java-cookie.git
@@ -144,7 +144,7 @@ To override the default cookie decoding you need to use a [converter](#converter
 
 ## Cookie Attributes
 
-the default cookie attributes can be set globally by setting properties of the `.defaults()` instance or individually for each call to `.set(...)` by passing an `Attributes` instance in the last argument. Per-call attributes override the default attributes.
+The default cookie attributes can be set globally by setting properties of the `.defaults()` instance or individually for each call to `.set(...)` by passing an `Attributes` instance in the last argument. Per-call attributes override the default attributes.
 
 ```java
 Cookies cookies = Cookies.initFromServlet( request, response );
@@ -234,6 +234,22 @@ Attributes httpOnlyCookie = Attributes.empty().httpOnly( true );
 cookies.set( "name", "value", httpOnlyCookie );
 cookies.get( "name" ); // => "value"
 cookies.remove( "name", httpOnlyCookie );
+```
+
+### sameSite
+
+Define whether your cookie should be restricted to a first party or same-site context
+
+**Default:** not set
+
+Note that more recent browsers are making "Lax" the default value even without specifying anything here.
+
+**Examples:**
+
+```java
+Cookies cookies = Cookies.initFromServlet( request, response );
+cookies.set( "name", "value", Attributes.empty().sameSite( "Lax" ) );
+cookies.get( "name" ); // => "value"
 ```
 
 ## Converter

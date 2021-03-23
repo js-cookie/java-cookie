@@ -11,4 +11,6 @@ public abstract class AttributesDefinition {
 	abstract Boolean secure();
 	public abstract AttributesDefinition httpOnly( Boolean httpOnly );
 	abstract Boolean httpOnly();
+	public abstract AttributesDefinition sameSite( String sameSite );
+	abstract String sameSite();
 }

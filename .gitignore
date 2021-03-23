@@ -6,3 +6,7 @@
 /pom.xml.releaseBackup
 *.iml
 .idea
+.vscode
+.settings
+.classpath
+.project
