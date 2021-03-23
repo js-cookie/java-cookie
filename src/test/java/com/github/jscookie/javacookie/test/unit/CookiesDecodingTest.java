@@ -28,6 +28,14 @@ public class CookiesDecodingTest extends BaseTest {
 	}
 
 	@Test
+	public void character_with_2_bytes() {
+		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=%C3%A3" );
+		String actual = cookies.get( "c" );
+		String expected = "ã";
+		Assert.assertEquals( expected, actual );
+	}
+
+	@Test
 	public void character_with_3_bytes() {
 		Mockito.when( request.getHeader( "cookie" ) ).thenReturn( "c=%E4%BA%AC" );
 		String actual = cookies.get( "c" );

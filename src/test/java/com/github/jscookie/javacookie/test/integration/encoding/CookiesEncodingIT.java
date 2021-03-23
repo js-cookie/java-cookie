@@ -44,9 +44,11 @@ public class CookiesEncodingIT {
 				"web.xml"
 			);
 
-		System.out.println( " ----- LOGGING THE FILES ADDED TO JBOSS" );
-		System.out.println( war.toString( true ) );
-		System.out.println( " ----- END OF LOGGING THE FILES ADDED TO JBOSS" );
+		if(debug.is(true)) {
+			System.out.println(" ----- LOGGING THE FILES ADDED TO JBOSS");
+			System.out.println(war.toString(true));
+			System.out.println(" ----- END OF LOGGING THE FILES ADDED TO JBOSS");
+		}
 
 		return war;
 	}
