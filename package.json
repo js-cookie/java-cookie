@@ -7,7 +7,7 @@
     "url": "https://github.com/js-cookie/java-cookie.git"
   },
   "devDependencies": {
-    "bower": "1.8.8"
+    "bower": "1.8.12"
   },
   "scripts": {
     "test": "cd bower_components/js-cookie && ../../node/node \"../../node/node_modules/npm/bin/npm-cli.js\" install"
