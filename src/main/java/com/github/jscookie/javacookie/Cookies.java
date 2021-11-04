@@ -1,23 +1,21 @@
 package com.github.jscookie.javacookie;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class Cookies implements CookiesDefinition {
 	private static String UTF_8 = "UTF-8";
@@ -307,17 +305,16 @@ public final class Cookies implements CookiesDefinition {
 				String character = new String( Character.toChars( codePoint ) );
 				CharArrayWriter hexSequence = new CharArrayWriter();
 				byte[] bytes = character.getBytes( UTF_8 );
-				for ( int bytesIndex = 0; bytesIndex < bytes.length; bytesIndex++ ) {
-					char left = Character.forDigit( bytes[ bytesIndex ] >> 4 & 0xF, 16 );
-					char right = Character.forDigit( bytes[ bytesIndex ] & 0xF, 16 );
+				for (byte aByte : bytes) {
+					char left = Character.forDigit(aByte >> 4 & 0xF, 16);
+					char right = Character.forDigit(aByte & 0xF, 16);
 					hexSequence
-						.append( '%' )
-						.append( left )
-						.append( right );
+							.append('%')
+							.append(left)
+							.append(right);
 				}
-				String target = character.toString();
 				String sequence = hexSequence.toString().toUpperCase();
-				encoded = encoded.replace( target, sequence );
+				encoded = encoded.replace(character, sequence );
 			} catch ( UnsupportedEncodingException e ) {
 				e.printStackTrace();
 			}
@@ -325,24 +322,13 @@ public final class Cookies implements CookiesDefinition {
 		return encoded;
 	}
 
-	private String decode( String encoded ) {
+	private String decode(String encoded) {
+		// Use URLDecoder to fix https://github.com/js-cookie/java-cookie/issues/14
 		String decoded = encoded;
-		Pattern pattern = Pattern.compile( "(%[0-9A-Z]{2})+" );
-		Matcher matcher = pattern.matcher( encoded );
-		while ( matcher.find() ) {
-			String encodedChar = matcher.group();
-			String[] encodedBytes = encodedChar.split( "%" );
-			byte[] bytes = new byte[ encodedBytes.length - 1 ];
-			for ( int i = 1; i < encodedBytes.length; i++ ) {
-				String encodedByte = encodedBytes[ i ];
-				bytes[ i - 1 ] = ( byte )Integer.parseInt( encodedByte, 16 );
-			}
-			try {
-				String decodedChar = new String( bytes, UTF_8 );
-				decoded = decoded.replace( encodedChar, decodedChar );
-			} catch ( UnsupportedEncodingException e ) {
+		try {
+		  decoded = URLDecoder.decode(encoded, UTF_8);
+		} catch ( UnsupportedEncodingException e) {
 				e.printStackTrace();
-			}
 		}
 		return decoded;
 	}
@@ -403,14 +389,13 @@ public final class Cookies implements CookiesDefinition {
 	private Map<String, String> getCookies( String cookieHeader ) {
 		Map<String, String> result = new HashMap<String, String>();
 		String[] cookies = cookieHeader.split( "; " );
-		for ( int i = 0; i < cookies.length; i++ ) {
-			String cookie = cookies[ i ];
-			String encodedName = cookie.split( "=" )[ 0 ];
-			String decodedName = decode( encodedName );
+		for (String cookie : cookies) {
+			String encodedName = cookie.split("=")[0];
+			String decodedName = decode(encodedName);
 
-			String encodedValue = cookie.substring( cookie.indexOf( '=' ) + 1, cookie.length() );
-			String decodedValue = decodeValue( encodedValue, decodedName );
-			result.put( decodedName, decodedValue );
+			String encodedValue = cookie.substring(cookie.indexOf('=') + 1);
+			String decodedValue = decodeValue(encodedValue, decodedName);
+			result.put(decodedName, decodedValue);
 		}
 		return result;
 	}
